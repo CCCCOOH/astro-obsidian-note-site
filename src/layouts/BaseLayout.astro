@@ -65,7 +65,9 @@ const currentPath = Astro.url.pathname;
 </head>
 <body>
   <Header currentPath={currentPath} />
-  <slot />
+  <main class="main-content">
+    <slot />
+  </main>
   <Footer />
 </body>
 </html>

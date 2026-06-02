@@ -9,10 +9,14 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 body {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
@@ -82,4 +86,13 @@ ul, ol {
 }
 [data-theme="dark"] ::selection {
   background-color: rgba(88, 166, 255, 0.3);
+}
+
+/* 页脚置底 */
+.main-content {
+  flex: 1 0 auto;
+  width: 100%;
+}
+.site-footer {
+  flex-shrink: 0;
 }
