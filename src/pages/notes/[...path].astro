@@ -58,12 +58,16 @@ const title = slug.split('/').pop();
     <aside class="sidebar-left" id="sidebar-left">
       <div class="sidebar-header-bar">
         <span class="sidebar-label">目录</span>
-        <button class="sidebar-toggle" id="toggle-left" aria-label="收起侧栏">
+        <button class="sidebar-toggle" id="toggle-left-inner" aria-label="收起侧栏">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M4.177 7.823l2.396-2.396a.25.25 0 01.354 0l.94.94a.25.25 0 01.058.263.25.25 0 01-.058.092L5.5 8.5l2.207 1.778a.25.25 0 010 .354l-.94.94a.25.25 0 01-.354 0l-2.396-2.396a.75.75 0 010-1.06v-.293z"/></svg>
         </button>
       </div>
       <Sidebar currentPath={slug} />
     </aside>
+
+    <button class="float-toggle float-toggle-left" id="toggle-left" aria-label="切换侧栏">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M4.177 7.823l2.396-2.396a.25.25 0 01.354 0l.94.94a.25.25 0 01.058.263.25.25 0 01-.058.092L5.5 8.5l2.207 1.778a.25.25 0 010 .354l-.94.94a.25.25 0 01-.354 0l-2.396-2.396a.75.75 0 010-1.06v-.293z"/></svg>
+    </button>
 
     <main class="note-content">
       <nav class="breadcrumb">
@@ -96,10 +100,14 @@ const title = slug.split('/').pop();
       <Backlinks backlinks={backlinks} />
     </main>
 
+    <button class="float-toggle float-toggle-right" id="toggle-right" aria-label="切换目录">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M11.823 7.823l-2.396-2.396a.25.25 0 00-.354 0l-.94.94a.25.25 0 00-.058.263.25.25 0 00.058.092L10.5 8.5l-2.207 1.778a.25.25 0 000 .354l.94.94a.25.25 0 00.354 0l2.396-2.396a.75.75 0 000-1.06v-.293z"/></svg>
+    </button>
+
     <aside class="sidebar-right" id="sidebar-right">
       <div class="sidebar-header-bar">
-        <span class="sidebar-label">目录</span>
-        <button class="sidebar-toggle" id="toggle-right" aria-label="收起目录">
+        <span class="sidebar-label">本页目录</span>
+        <button class="sidebar-toggle" id="toggle-right-inner" aria-label="收起目录">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M11.823 7.823l-2.396-2.396a.25.25 0 00-.354 0l-.94.94a.25.25 0 00-.058.263.25.25 0 00.058.092L10.5 8.5l-2.207 1.778a.25.25 0 000 .354l.94.94a.25.25 0 00.354 0l2.396-2.396a.75.75 0 000-1.06v-.293z"/></svg>
         </button>
       </div>
@@ -113,31 +121,25 @@ const title = slug.split('/').pop();
     const page = document.getElementById('note-page');
     const left = document.getElementById('sidebar-left');
     const right = document.getElementById('sidebar-right');
-    const toggleLeft = document.getElementById('toggle-left');
-    const toggleRight = document.getElementById('toggle-right');
+    function toggleSidebar(side) {
+      page.classList.toggle('sidebar-' + side + '-collapsed');
+      localStorage.setItem('sidebar-' + side,
+        page.classList.contains('sidebar-' + side + '-collapsed') ? 'collapsed' : 'expanded');
+    }
 
-    // 从 localStorage 读取状态
+    // 左侧栏: 内按钮 + 浮动按钮 都绑定同一个切换
     const leftState = localStorage.getItem('sidebar-left');
-    const rightState = localStorage.getItem('sidebar-right');
-
     if (leftState === 'collapsed') page.classList.add('sidebar-left-collapsed');
+    document.querySelectorAll('#toggle-left, #toggle-left-inner').forEach(btn => {
+      if (btn) btn.addEventListener('click', () => toggleSidebar('left'));
+    });
+
+    // 右侧栏: 内按钮 + 浮动按钮
+    const rightState = localStorage.getItem('sidebar-right');
     if (rightState === 'collapsed') page.classList.add('sidebar-right-collapsed');
-
-    if (toggleLeft) {
-      toggleLeft.addEventListener('click', () => {
-        page.classList.toggle('sidebar-left-collapsed');
-        localStorage.setItem('sidebar-left',
-          page.classList.contains('sidebar-left-collapsed') ? 'collapsed' : 'expanded');
-      });
-    }
-
-    if (toggleRight) {
-      toggleRight.addEventListener('click', () => {
-        page.classList.toggle('sidebar-right-collapsed');
-        localStorage.setItem('sidebar-right',
-          page.classList.contains('sidebar-right-collapsed') ? 'collapsed' : 'expanded');
-      });
-    }
+    document.querySelectorAll('#toggle-right, #toggle-right-inner').forEach(btn => {
+      if (btn) btn.addEventListener('click', () => toggleSidebar('right'));
+    });
   })();
 </script>
 
@@ -149,6 +151,8 @@ const title = slug.split('/').pop();
     min-height: calc(100vh - var(--header-height));
     position: relative;
   }
+  /* 防止浮动按钮溢出被裁剪 */
+  .note-page { overflow: visible; }
 
   .sidebar-header-bar {
     display: flex;
@@ -220,9 +224,67 @@ const title = slug.split('/').pop();
     overflow: hidden;
   }
 
-  .sidebar-left-collapsed #toggle-left svg,
-  .sidebar-right-collapsed #toggle-right svg {
+  /* 浮动切换按钮 — 始终可见 */
+  .float-toggle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.1s, background 0.1s;
+  }
+  .note-page:hover .float-toggle {
+    opacity: 1;
+  }
+  .float-toggle:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-link);
+  }
+
+  .float-toggle-left {
+    left: var(--sidebar-width);
+    margin-left: -10px;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+  }
+  .sidebar-left-collapsed .float-toggle-left {
+    left: 0;
+    border-left: 1px solid var(--color-border);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .float-toggle-right {
+    right: 220px;
+    margin-right: -10px;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+  }
+  .sidebar-right-collapsed .float-toggle-right {
+    right: 0;
+    border-right: 1px solid var(--color-border);
+    border-radius: 4px 0 0 4px;
+  }
+
+  /* 展开时浮动按钮箭头朝内，折叠时箭头朝外 */
+  .sidebar-left-collapsed .float-toggle-left svg {
     transform: scaleX(-1);
+  }
+  .sidebar-right-collapsed .float-toggle-right svg {
+    transform: scaleX(-1);
+  }
+  .sidebar-left-collapsed .float-toggle-left,
+  .sidebar-right-collapsed .float-toggle-right {
+    opacity: 1;
   }
 
   .breadcrumb { font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 16px; }
