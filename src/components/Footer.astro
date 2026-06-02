@@ -1,0 +1,27 @@
+---
+// src/components/Footer.astro
+---
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <span>Built with Astro + Obsidian</span>
+    <span class="footer-sep">·</span>
+    <span>&copy; {new Date().getFullYear()}</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-3) var(--space-4);
+    margin-top: var(--space-4);
+  }
+  .footer-content {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+  .footer-sep { margin: 0 8px; }
+</style>

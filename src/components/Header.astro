@@ -1,0 +1,70 @@
+---
+// src/components/Header.astro
+---
+
+<header class="site-header">
+  <div class="header-left">
+    <a href="/" class="header-logo">
+      <span class="logo-icon">📝</span>
+      <span class="logo-text">Astro Notes</span>
+    </a>
+  </div>
+
+  <nav class="header-nav">
+    <a href="/">首页</a>
+    <a href="/tags">标签</a>
+    <a href="/search">搜索</a>
+    <a href="/graph">图谱</a>
+  </nav>
+
+  <div class="header-right">
+    <button id="theme-toggle" class="theme-btn" aria-label="切换主题">
+      <span class="theme-icon-light">☀️</span>
+      <span class="theme-icon-dark">🌙</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    display: flex; align-items: center; justify-content: space-between;
+    height: var(--header-height); padding: 0 var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; }
+  .header-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text-primary); }
+  .header-logo:hover { text-decoration: none; }
+  .logo-icon { font-size: 1.25rem; }
+  .logo-text { font-size: 1rem; font-weight: 600; }
+  .header-nav { display: flex; gap: var(--space-3); }
+  .header-nav a { color: var(--color-text-secondary); font-size: 0.875rem; }
+  .header-nav a:hover { color: var(--color-text-primary); text-decoration: none; }
+  .header-right { display: flex; align-items: center; }
+  .theme-btn {
+    background: none; border: 1px solid var(--color-border); border-radius: 6px;
+    padding: 4px 8px; cursor: pointer; font-size: 1rem;
+    color: var(--color-text-secondary);
+  }
+  .theme-btn:hover { background: var(--color-bg-secondary); }
+  [data-theme="dark"] .theme-icon-light { display: none; }
+  [data-theme="light"] .theme-icon-dark { display: none; }
+
+  @media (max-width: 768px) {
+    .header-nav { display: none; }
+  }
+</style>
