@@ -1,0 +1,27 @@
+{
+  "name": "astro-obsidian-note",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync": "bash scripts/sync-notes.sh",
+    "process": "node scripts/process-data.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "rehype-katex": "^7.0.0",
+    "remark-math": "^6.0.0",
+    "remark-gfm": "^4.0.0",
+    "katex": "^0.16.0",
+    "pagefind": "^1.0.0",
+    "vis-network": "^9.0.0",
+    "mermaid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}
