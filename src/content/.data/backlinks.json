@@ -1,0 +1,16 @@
+{
+  "notes/hello": [
+    {
+      "source": "/notes/sub%2Fdemo",
+      "sourceTitle": "演示笔记",
+      "displayText": "hello"
+    }
+  ],
+  "notes/sub/demo": [
+    {
+      "source": "/notes/hello",
+      "sourceTitle": "Hello Astro",
+      "displayText": "sub/demo.md"
+    }
+  ]
+}

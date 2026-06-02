@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {
+      "id": "notes/hello",
+      "label": "Hello Astro",
+      "size": 5,
+      "title": "Hello Astro"
+    },
+    {
+      "id": "notes/sub/demo",
+      "label": "演示笔记",
+      "size": 5,
+      "title": "演示笔记"
+    }
+  ],
+  "edges": [
+    {
+      "from": "notes/hello",
+      "to": "notes/sub/demo"
+    },
+    {
+      "from": "notes/sub/demo",
+      "to": "notes/hello"
+    }
+  ]
+}

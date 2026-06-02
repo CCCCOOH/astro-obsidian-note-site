@@ -1,0 +1,42 @@
+{
+  "astro": {
+    "notes": [
+      {
+        "path": "/notes/hello",
+        "title": "Hello Astro"
+      }
+    ],
+    "count": 1
+  },
+  "obsidian": {
+    "notes": [
+      {
+        "path": "/notes/hello",
+        "title": "Hello Astro"
+      }
+    ],
+    "count": 1
+  },
+  "demo": {
+    "notes": [
+      {
+        "path": "/notes/hello",
+        "title": "Hello Astro"
+      },
+      {
+        "path": "/notes/sub%2Fdemo",
+        "title": "演示笔记"
+      }
+    ],
+    "count": 2
+  },
+  "测试": {
+    "notes": [
+      {
+        "path": "/notes/hello",
+        "title": "Hello Astro"
+      }
+    ],
+    "count": 1
+  }
+}
