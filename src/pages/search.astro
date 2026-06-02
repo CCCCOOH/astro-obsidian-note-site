@@ -1,0 +1,109 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="搜索" description="全文搜索笔记">
+  <div class="search-page">
+    <h1>🔍 搜索</h1>
+    <div id="search"></div>
+  </div>
+</BaseLayout>
+
+<script>
+  async function loadSearch() {
+    try {
+      const pagefind = await import('/pagefind/pagefind.js');
+      const searchUI = document.createElement('div');
+      searchUI.className = 'pagefind-ui';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = '搜索笔记...';
+      input.className = 'pagefind-search-input';
+      input.addEventListener('input', async (e) => {
+        const query = e.target.value;
+        if (query.length < 2) return;
+
+        const results = await pagefind.search(query);
+        const resultsContainer = document.getElementById('search-results') || document.createElement('div');
+        resultsContainer.id = 'search-results';
+        resultsContainer.innerHTML = '';
+
+        if (results.results.length === 0) {
+          resultsContainer.innerHTML = '<p class="no-results">未找到结果</p>';
+          return;
+        }
+
+        for (const result of results.results.slice(0, 20)) {
+          const data = await result.data();
+          const el = document.createElement('div');
+          el.className = 'search-result';
+          el.innerHTML = `
+            <a href="${data.url}" class="search-result-title">${data.title}</a>
+            <p class="search-result-excerpt">${data.excerpt}</p>
+          `;
+          resultsContainer.appendChild(el);
+        }
+
+        document.querySelector('.search-results-wrapper')?.appendChild(resultsContainer);
+      });
+
+      searchUI.appendChild(input);
+
+      const resultsWrapper = document.createElement('div');
+      resultsWrapper.className = 'search-results-wrapper';
+      searchUI.appendChild(resultsWrapper);
+
+      document.getElementById('search').appendChild(searchUI);
+    } catch (e) {
+      console.error('Pagefind 加载失败:', e);
+      document.getElementById('search').innerHTML = '<p>搜索暂不可用</p>';
+    }
+  }
+
+  loadSearch();
+</script>
+
+<style>
+  .search-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .search-page h1 { margin-bottom: 1.5rem; }
+  .pagefind-search-input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+  }
+  .pagefind-search-input:focus {
+    outline: none;
+    border-color: var(--color-link);
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+  }
+  .search-result {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .search-result-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-link);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .search-result-excerpt {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+  .no-results {
+    text-align: center;
+    color: var(--color-text-secondary);
+    padding: 2rem;
+  }
+</style>

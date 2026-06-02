@@ -28,4 +28,11 @@ export default defineConfig({
   integrations: [sitemap()],
   srcDir: './src',
   publicDir: './public',
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['/pagefind/pagefind.js'],
+      },
+    },
+  },
 });
