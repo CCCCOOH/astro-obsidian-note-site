@@ -1,5 +1,6 @@
 ---
 import Icons from '@components/Icons.astro';
+import { nav } from '@config/site';
 ---
 
 <header class="site-header">
@@ -11,58 +12,83 @@ import Icons from '@components/Icons.astro';
   </div>
 
   <nav class="header-nav">
-    <a href="/">首页</a>
-    <a href="/tags">标签</a>
-    <a href="/search">搜索</a>
-    <a href="/graph">图谱</a>
+    {nav.filter(item => item.href !== '/settings').map(item => (
+      <a href={item.href}>
+        <Icons name={item.icon} size={14} />
+        <span>{item.text}</span>
+      </a>
+    ))}
   </nav>
 
   <div class="header-right">
-    <button id="theme-toggle" class="theme-btn" aria-label="切换主题">
-      <span class="theme-icon-light"><Icons name="sun" /></span>
-      <span class="theme-icon-dark"><Icons name="moon" /></span>
-    </button>
+    <a href="/settings" class="header-icon-btn" aria-label="设置">
+      <Icons name="settings" size={16} />
+    </a>
   </div>
 </header>
 
-<script>
-  const btn = document.getElementById('theme-toggle');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      const html = document.documentElement;
-      const current = html.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
-  }
-</script>
-
 <style>
   .site-header {
-    display: flex; align-items: center; justify-content: space-between;
-    height: var(--header-height); padding: 0 var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+    padding: 0 24px;
     border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg-primary);
-    position: sticky; top: 0; z-index: 100;
+    background: var(--color-bg-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
   .header-left { display: flex; align-items: center; }
-  .header-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text-primary); }
-  .header-logo:hover { text-decoration: none; }
-  .logo-icon { font-size: 1.25rem; }
-  .logo-text { font-size: 1rem; font-weight: 600; }
-  .header-nav { display: flex; gap: var(--space-3); }
-  .header-nav a { color: var(--color-text-secondary); font-size: 0.875rem; }
-  .header-nav a:hover { color: var(--color-text-primary); text-decoration: none; }
-  .header-right { display: flex; align-items: center; }
-  .theme-btn {
-    background: none; border: 1px solid var(--color-border); border-radius: 6px;
-    padding: 4px 8px; cursor: pointer; font-size: 1rem;
-    color: var(--color-text-secondary);
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    font-size: 1rem;
   }
-  .theme-btn:hover { background: var(--color-bg-secondary); }
-  [data-theme="dark"] .theme-icon-light { display: none; }
-  [data-theme="light"] .theme-icon-dark { display: none; }
+  .header-logo:hover { text-decoration: none; color: var(--color-link); }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .header-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    transition: background 0.1s, color 0.1s;
+    text-decoration: none;
+  }
+  .header-nav a:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-tertiary);
+  }
+
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .header-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    transition: background 0.1s, color 0.1s;
+  }
+  .header-icon-btn:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+  }
 
   @media (max-width: 768px) {
     .header-nav { display: none; }

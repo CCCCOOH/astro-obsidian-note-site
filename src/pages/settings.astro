@@ -1,0 +1,186 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Icons from '@components/Icons.astro';
+import { site, author } from '@config/site';
+---
+
+<BaseLayout title="设置" description="网站设置">
+  <div class="settings-page">
+    <h1><Icons name="settings" size={24} /> 设置</h1>
+
+    <section class="settings-section">
+      <h2>站点信息</h2>
+      <div class="setting-item">
+        <label>站点标题</label>
+        <code>{site.title}</code>
+      </div>
+      <div class="setting-item">
+        <label>站点描述</label>
+        <code>{site.description}</code>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>外观</h2>
+      <div class="setting-item">
+        <label>主题</label>
+        <div class="setting-control">
+          <button id="theme-light" class="setting-btn" data-theme="light">
+            <Icons name="sun" size={14} /> 亮色
+          </button>
+          <button id="theme-dark" class="setting-btn" data-theme="dark">
+            <Icons name="moon" size={14} /> 暗色
+          </button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label>字体大小</label>
+        <div class="setting-control">
+          <button id="font-sm" class="setting-btn" data-size="14">小</button>
+          <button id="font-md" class="setting-btn" data-size="16">中</button>
+          <button id="font-lg" class="setting-btn" data-size="18">大</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>关于</h2>
+      <div class="setting-item">
+        <label>作者</label>
+        <span>{author.name}</span>
+      </div>
+      <div class="setting-item">
+        <label>版本</label>
+        <span>0.1.0</span>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // === 主题切换 ===
+  function initTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    document.querySelectorAll('[data-theme]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.theme === current);
+      btn.addEventListener('click', () => {
+        document.documentElement.setAttribute('data-theme', btn.dataset.theme);
+        localStorage.setItem('theme', btn.dataset.theme);
+        document.querySelectorAll('[data-theme]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  }
+
+  // === 字体大小 ===
+  function initFontSize() {
+    const current = localStorage.getItem('fontSize') || '16';
+    document.querySelectorAll('[data-size]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.size === current);
+      btn.addEventListener('click', () => {
+        const size = btn.dataset.size;
+        document.documentElement.style.fontSize = size + 'px';
+        localStorage.setItem('fontSize', size);
+        document.querySelectorAll('[data-size]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // 页面加载时恢复字体大小
+    const saved = localStorage.getItem('fontSize');
+    if (saved && saved !== '16') {
+      document.documentElement.style.fontSize = saved + 'px';
+    }
+  }
+
+  initTheme();
+  initFontSize();
+</script>
+
+<style>
+  .settings-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .settings-page h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+  }
+
+  .settings-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .settings-section:last-child { border-bottom: none; }
+
+  .settings-section h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+  .setting-item label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  .setting-item code {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-tertiary);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .setting-item span {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+  }
+
+  .setting-control {
+    display: flex;
+    gap: 6px;
+  }
+
+  .setting-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .setting-btn:hover {
+    border-color: var(--color-link);
+    color: var(--color-link);
+  }
+  .setting-btn.active {
+    background: var(--color-link);
+    border-color: var(--color-link);
+    color: #ffffff;
+  }
+  [data-theme="dark"] .setting-btn.active {
+    background: var(--color-link);
+    color: #ffffff;
+  }
+</style>

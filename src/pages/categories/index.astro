@@ -1,0 +1,117 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Icons from '@components/Icons.astro';
+import fs from 'fs';
+import path from 'path';
+
+const notesDir = process.cwd() + '/src/content/notes';
+
+interface Category {
+  name: string;
+  path: string;
+  noteCount: number;
+  children: { name: string; path: string }[];
+}
+
+const categories: Category[] = [];
+
+try {
+  const entries = fs.readdirSync(notesDir, { withFileTypes: true });
+  for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+    if (entry.name.startsWith('.')) continue;
+
+    if (entry.isDirectory()) {
+      const dirPath = path.join(notesDir, entry.name);
+      const children: { name: string; path: string }[] = [];
+      let noteCount = 0;
+
+      for (const sub of fs.readdirSync(dirPath, { withFileTypes: true })) {
+        if (sub.name.endsWith('.md')) {
+          const name = sub.name.replace(/\.md$/, '');
+          children.push({ name, path: `/notes/${entry.name}/${name}` });
+          noteCount++;
+        }
+      }
+
+      if (noteCount > 0 || children.length > 0) {
+        categories.push({
+          name: entry.name,
+          path: `/notes/${entry.name}`,
+          noteCount,
+          children,
+        });
+      }
+    } else if (entry.name.endsWith('.md')) {
+      // 根目录的笔记
+      const name = entry.name.replace(/\.md$/, '');
+      const rootCat = categories.find(c => c.name === '_root');
+      if (!rootCat) {
+        categories.unshift({
+          name: '根目录',
+          path: '/notes',
+          noteCount: 1,
+          children: [{ name, path: `/notes/${name}` }],
+        });
+      } else {
+        rootCat.noteCount++;
+        rootCat.children.push({ name, path: `/notes/${name}` });
+      }
+    }
+  }
+} catch (e) {
+  console.warn('无法读取笔记目录');
+}
+---
+
+<BaseLayout title="分类" description="笔记分类">
+  <div class="categories-page">
+    <h1><Icons name="category" size={24} /> 分类</h1>
+
+    {categories.length === 0 && (
+      <p class="no-categories">暂无分类</p>
+    )}
+
+    <div class="category-grid">
+      {categories.map(cat => (
+        <div class="category-card">
+          <div class="category-header">
+            <Icons name="folder" size={20} />
+            <h2>{cat.name}</h2>
+            <span class="category-count">{cat.noteCount} 篇</span>
+          </div>
+          <ul class="category-notes">
+            {cat.children.map(note => (
+              <li><a href={note.path}>{note.name}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .categories-page { max-width: 900px; margin: 0 auto; padding: 2rem; }
+  .categories-page h1 { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
+  .no-categories { color: var(--color-text-secondary); text-align: center; padding: 2rem; }
+  .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  .category-card {
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 1.25rem;
+    background: var(--color-bg-secondary);
+    transition: box-shadow 0.15s;
+  }
+  .category-card:hover { box-shadow: 0 1px 5px rgba(0,0,0,0.08); }
+  .category-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem; }
+  .category-header h2 { font-size: 1.1rem; margin: 0; font-weight: 600; }
+  .category-count { font-size: 0.75rem; color: var(--color-text-secondary); margin-left: auto; }
+  .category-notes { list-style: none; padding: 0; margin: 0; }
+  .category-notes li { padding: 4px 0; }
+  .category-notes a { color: var(--color-link); font-size: 0.9rem; }
+  .category-notes a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .category-grid { grid-template-columns: 1fr; }
+  }
+</style>
