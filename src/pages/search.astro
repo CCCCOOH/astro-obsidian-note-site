@@ -10,8 +10,8 @@ import Icons from '@components/Icons.astro';
   </div>
 </BaseLayout>
 
-<script>
-  async function loadSearch() {
+<script is:inline>
+  (async function() {
     try {
       const pagefind = await import('/pagefind/pagefind.js');
       const searchUI = document.createElement('div');
@@ -58,11 +58,9 @@ import Icons from '@components/Icons.astro';
       document.getElementById('search').appendChild(searchUI);
     } catch (e) {
       console.error('Pagefind 加载失败:', e);
-      document.getElementById('search').innerHTML = '<p>搜索暂不可用</p>';
+      document.getElementById('search').innerHTML = '<p>搜索暂不可用（请先构建站点: <code>npm run build && npm run preview</code>）</p>';
     }
-  }
-
-  loadSearch();
+  })();
 </script>
 
 <style>

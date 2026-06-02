@@ -1,0 +1,757 @@
+> 这一讲是前几讲最重要最难的一讲。
+
+## 旋转矩阵是正交矩阵
+
+旋转矩阵： 
+
+$$
+R_{\theta}=
+\begin{pmatrix}
+\cos\theta & -\sin\theta \\
+\sin\theta & \cos\theta
+\end{pmatrix}
+$$
+
+旋转 $-\theta$ 的矩阵：
+$$
+R_{-\theta}=
+\begin{pmatrix}
+\cos\theta & \sin\theta \\
+-\sin\theta & \cos\theta
+\end{pmatrix}
+$$
+可以发现，$R_{-\theta}$ 恰好是 $R_{\theta}$ 转置，即：
+
+$$
+R_{-\theta}=R_{\theta}^{T}
+$$
+从定义上来看（by defination）$R_{-\theta}$ 和 $R_{\theta}^{-1}$ 刚好是一个互逆的操作。所以：$R_{-\theta}=R_{\theta}^{-1}$。
+
+> 从数学上说，该矩阵是一个正交矩阵，非常好的性质。
+
+## 3D Transformation 三维变换
+
+### 3D 齐次坐标
+
+
+- 点：$(x,y,z,1)^{T}$
+- 向量：$(x,y,z,0)^{T}$
+
+对于一个 $w\neq0$ 的点，$(x,y,z,w)$ 一般认为是一个点，只需要同除以 $w$ 即可：
+$$
+(x/w, y / w, z / w, 1)^{T}
+$$
+
+
+### 3D 变换
+
+对于仿射变换：
+
+$$
+\begin{pmatrix}
+x' \\
+y' \\
+z' \\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+a & b & c & t_{x} \\
+d & e & f & t_{y} \\
+g & h & i & t_{z} \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+$$
+类似于二维空间中的变换。
+
+
+### 3D 缩放
+
+$$
+S(s_{x},s_{y},s_{z})=
+\begin{pmatrix}
+s_{x} & 0 & 0 & 0 \\
+0 & s_{y} & 0 & 0 \\
+0 & 0 & s_{z} & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+### 3D 平移
+
+$$
+T(t_{x},t_{y},t_{z})=
+\begin{pmatrix}
+1 & 0 & 0 & t_{x} \\
+0 & 1 & 0 & t_{y} \\
+0 & 0 & 1 & t_{z} \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+### 3D 绕轴旋转
+
+可能是三维空间中最复杂的操作。
+
+$$
+R_{x}(\alpha)
+=
+\begin{pmatrix}
+1 & 0 & 0 & 0 \\
+0 & \cos\alpha & -\sin\alpha & 0 \\
+0 & \sin\alpha & \cos\alpha & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+$$
+R_{y}(\alpha)
+=
+\begin{pmatrix}
+\cos\alpha & 0 & \sin\alpha & 0 \\
+0 & 1 & 0 & 0 &  \\
+-\sin\alpha & 0 & \cos\alpha & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+$$
+R_{z}(\alpha)=\begin{pmatrix}
+\cos\alpha & -\sin\alpha & 0 & 0 \\
+\sin\alpha & \cos\alpha & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182023094.png)
+
+一个有趣的规律，绕对应的轴旋转，对应行不改变。比如绕 $y$ 轴旋转，第二行是不变的。
+
+那么，为什么这里的 $y$ 轴旋转矩阵形式不太一样？
+
+如果给你 $x \times y$ 轴，通过右手螺旋定则可以得到 $z$ 轴。同样的，用 $y \times z$ 也可以得到 $x$ 轴，称之为 `循环对称` 性质。但是用 $x \times z$ 得到的是 $-y$，用 $z\times x$ 才能得到 $y$。
+
+> 任何复杂旋转都可以分解为绕轴旋转的组合。
+
+### 罗德里格斯（Rodrigues）旋转公式
+
+- 旋转轴 $n$
+- 旋转角度 $\alpha$
+
+$$
+R(n, \alpha) = \cos(\alpha)I + (1-\cos(\alpha))nn^{T}+\sin(\alpha)\begin{pmatrix}
+0 & -n_{z} & n_{y} \\
+n_{z} & 0 & -n_{x} \\
+-n_{y} & n_{x} & 0
+\end{pmatrix}
+$$
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182043650.png)
+
+## Viewing 变换
+
+- View（视图）/Camera 变换
+- Projection（投影）变换
+	- （Orthographic）正交投影
+	- （Perspective）透视投影
+
+
+我们学了这么多的变换，最终都是为了把三维空间中的物体变成二维空间中的一张照片（显示在屏幕上）。
+
+
+### View/Camera 变换
+
+### 引文
+
+- 什么是 `view transformation` ？
+- 思考如何拍一张照片：
+	- 找一个好的场景、安排好演员（**model** Transformation 模型变换）
+	- 找一个好的“角度”放置摄像机（**view** Transformation 视图变换）
+	- 茄子！
+
+简称 `MVP` 变换！
+
+- 如何实施视图变换 `view transformation`？
+- 回忆：我们先要摆好相机。
+	- `Positoin`: $\vec{e}$（位置）
+	- `Look-at/graze direction`：$\hat{g}$（朝向）
+	- `Up direction`：$\hat{t}$（头顶方向）
+
+相对运动于观察上（拍照）也是同理。
+
+- 当相机和所有的物体一起移动时，拍出的照片一样。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182106450.png)
+
+- 为什么不考虑把相机永远置于源点，上方同 $Y$ 轴，并且 look at $-Z$。
+- 并且让相机同所有物体一同移动。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182108196.png)
+
+### 怎么写出数学表示
+
+通过 $V_{view}$ 变换相机，在数学上怎么表示？
+- 将 $e$ 平移到零点
+- 旋转 $g$ 到 $-Z$
+- 旋转 $t$ 到 $Y$
+- 旋转 $(gxt)$ 到 $X$
+
+> 但是孩子，这并不好写。
+
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182129003.png)
+
+
+我们可以分解为 `平移+旋转` 两步。
+
+$$
+M_{view}=R_{view}T_{view}
+$$
+先将相机平移到原点：
+$$
+T_{view}=\begin{bmatrix}
+1 & 0 & 0 & -x_{e} \\
+0 & 1 & 0 & -y_{e} \\
+0 & 0 & 1 & -z_{e} \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+这里的 $(x_{e},y_{e},z_{e},1)$ 是相机的坐标。
+
+接下来考虑如何旋转摄像机，使其匹配我们的基准轴。
+
+- 旋转 $g$ 到 $-Z$
+- 旋转 $t$ 到 $Y$
+- 旋转 $(gxt)$ 到 $X$
+
+> $(gxt)$ 实际上是其他两条轴的叉乘。
+
+🤔**小巧思**：将相机旋转到基底上不好写，但是反过来想很容易。我们可以把一个位于原点的点旋转到相机当前所处的角度。
+
+**标准状态**下：
+- $X$ 轴是 $(1,0,0)$
+- $Y$ 轴是 $(0,1,0)$
+- $Z$ 轴是 $(0,0,1)$
+
+**目标状态**下：
+- $X$ 轴变成 $\hat{g}\times \hat{t}$
+- $Y$ 轴变成 $\hat{t}$
+- $Z$ 轴变成 $-\hat{g}$
+
+> 将坐标轴看做为向量即可，相机的三个轴也是向量。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182129003.png)
+
+### 视图变换矩阵
+
+
+$$
+R^{-1}_{view}=
+\begin{bmatrix}
+x_{\hat{g}\times\hat{t}} & x_{t} & x_{-g} & 0 \\
+y_{\hat{g}\times\hat{t}} & y_{t} & y_{-g} & 0 \\
+z_{\hat{g}\times\hat{t}} & z_{t} & z_{-g} & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+可以验证，对原点施加 $R_{view}^{-1}$ 得到：
+$$
+\begin{pmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 &  \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+x_{\hat{g}\times\hat{t}} & x_{t} & x_{-g} & 0 \\
+y_{\hat{g}\times\hat{t}} & y_{t} & y_{-g} & 0 \\
+z_{\hat{g}\times\hat{t}} & z_{t} & z_{-g} & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+=E \cdot \begin{pmatrix}
+x_{\hat{g}\times\hat{t}} & x_{t} & x_{-g} & 0 \\
+y_{\hat{g}\times\hat{t}} & y_{t} & y_{-g} & 0 \\
+z_{\hat{g}\times\hat{t}} & z_{t} & z_{-g} & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+这里的 $R_{view}^{-1}$ 中的每一个列向量就是相机的轴向量。
+
+> $\hat{g}\times \hat{t}=\hat{e}$
+
+
+转置后得到：
+$$
+R_{view}=
+\begin{bmatrix}
+x_{\hat{g}\times \hat{t}} & y_{\hat{g}\times \hat{t}} & z_{\hat{g}\times \hat{t}} & 0 \\
+x_{t} & y_{t} & z_{t} & 0 \\
+x_{-g} & y_{-g} & z_{-g} & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+> 可以看到，$R_{view}$ 其实就是把相机身上的三条正交向量拼在一个矩阵里做转置得到的。
+
+总结：
+- 让物体和相机一起变换。
+- 直到相机位于原点，头朝上（$Y$），看向 $-Z$。
+
+视图变换操作的是相机其他的物体跟着变换，我们刚才提到了相对运动的概念。我们移动完这些物体之后，又把这些物体按照视图变换的矩阵做了一次变换（因为他要和相机一块儿变换）。所以可以发现，不管是模型矩阵还是视图矩阵，最后都会被应用到物体上。所以说这两个矩阵本质上做的事情差不多（一个意思），所以这俩经常被放在一起被大家称作**模型视图变换**。
+
+接下来就要做投影操作：`Projection`。当人已经站好，相机已经摆好，下面就需要将三维投影到二维。
+
+模型变换说的是通过变换把物体摆在场景里。
+
+## 投影变换
+
+### 道理我都懂，可是为什么鸽子这么大？
+
+计算机中的投影：
+- `3D` to `2D`
+- **正交投影**：正方体的所有棱平行。
+- **透视投影**：延长棱会相交于一个点上（人眼的成像）。
+
+> Tiger Book 这本书中的例子（并不直观）。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182221046.png)
+
+
+> **道理我都懂，但是为什么鸽子🕊这么大？**
+
+由梗推测闫老师的年龄：[https://www.bilibili.com/video/BV16B4y1r7tn/](https://www.bilibili.com/video/BV16B4y1r7tn/)。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182226235.png)
+
+
+**ps**：这是本课程最好玩的梗，哈哈哈哈。
+
+透视投影对比正交投影：
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182228063.png)
+
+## 正交投影
+
+一种简单的理解方式：
+
+- 首先把相机放在原点，看向 $-Z$，向上是 $Y$。
+- 丢掉 $Z$ 坐标自然是平面上的一张图。
+- 无论 $x$ 和 $y$ 多大，都移动到 $[-1,1]^{2}$ 这个矩形内。
+
+> 有同学可能问，如果把 $Z$ 扔掉如何区分前后呢？这是一个问题，在后面的课程会得到讨论。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182231260.png)
+
+但是更加正式的做法（在图形学上来说更加方便的做法）是：
+- 我们定义空间中的一个立方体：$[l,r]\times[b,t]\times[f,n]$（左右、下上、**远近**）
+- 我们试图把这个立方体映射到：**立方体**$[-1,1]^{3}$（正则/规范/标准立方体 `canonical cube`）
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182234878.png)
+
+方法是：
+- 先把立方体的中心移到原点。
+- 然后将 $x,y,z$ 轴~~鸽子~~**各自**伸缩到 $[-1,1]$
+
+定义：
+- 我们在 $x$ 轴上定义左、右。
+- 在 $y$ 轴上定义下、上。
+- 在 $z$ 轴上定义远、近。
+
+*一个不直观的定义*： $z$ **的正方向为近，负方向为远**。所以一个物体离我们更近意味着它的 $z$ 值要更大。
+
+> **原因**：我们是沿着 $-z$ 方向去看的（为了保证右手坐标系），这也是为什么在一些图形学的 API 里（比如 OpenGL）会假设我们用的是左手系，因为左手系在这一点上会更方便一些。
+
+
+### 数学表达式
+
+- **中心移到原点**。
+- **缩放**。
+
+$$
+M_{ortho}=\begin{bmatrix}
+\frac{2}{r-l} & 0 & 0 & 0 \\
+0 & \frac{2}{t-b} & 0 & 0 \\
+0 & 0 & \frac{2}{n-f} & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 & - \frac{r+l}{2} \\
+0 & 1 & 0 & -\frac{t+b}{2} \\
+0 & 0 & 1 & -\frac{n+f}{2} \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182234878.png)
+
+> 因为覆盖的范围是 $[l,r]\to[-1,1]$，所以缩放的长度为 $2$。
+
+对于正交投影，非常简单就写出来了。
+
+## 透视投影
+
+- 透视投影是应用最广泛的投影。
+- 近大远小。
+- 平行线看上去不再平行。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182248445.png)
+
+### 齐次定义
+
+- 对一个坐标 $(x,y,z,1)$，$(kx,ky,kz,k)$，只要 $k\neq 0$ 就表示同一个三维空间中同一个点 $(x,y,z)$。
+- 比如 $(1,0,0,1)$ 和 $(2,0,0,2)$ 都表示 $(1,0,0,1)$。
+- 更进一步，我们同乘以 $z$，$(xz,yz,z^{2},z)$ 也表示同一个点 $(x,y,z,1)$。
+
+> 简单但有用。
+
+### 如果做透视投影
+
+如何做透视投影：
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182252602.png)
+
+
+很多教材会直接把透视投影的矩阵给出来，但是这样不好理解。更好理解的方式是想象原屏幕上的**四个顶点**，我们把他们挤到和近平面同一个高度上。换言之，我们把他“挤”成了空间中的一个长方体。然后做正交投影就行了。
+
+现在的问题是：“挤”这个操作怎么做？
+
+在挤压的操作中我们规定几点：
+- 近平面上的点永远不变（想象你要把窗户外面的东西画到窗户上，窗户上的东西不会改变）。
+- 远平面的点 $z$ 值不会发生变化。
+- 远平面的中心点不会变。
+
+现在的问题是如何把 `Frustum` 挤压到 `Cuboid`。
+
+
+从侧面看：
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602182318284.png)
+
+根据相似三角形，任意一个点的 $y$ 和 $x$ 会如何被挤压是相对清楚的。这就可以做为一个对应关系。
+
+也就是：
+$$
+\begin{align}
+y' = \frac{n}{z}y \\
+x'=\frac{n}{z}x
+\end{align}
+$$
+原本的坐标会变成（第二步同乘以 $z$）：
+$$
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+\implies
+\begin{pmatrix}
+\frac{nx}{z} \\
+\frac{ny}{z} \\
+\text{unknown} \\
+1
+\end{pmatrix}
+=\begin{pmatrix}
+nx \\
+ny \\
+\text{still unknown}\\
+z
+\end{pmatrix}
+$$
+
+这样我们就能填上变换矩阵的一部分值。
+
+所以从透视矩阵到正交矩阵的投影：
+$$
+M_{persp\to ortho}\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+=\begin{pmatrix}
+nx \\
+ny \\
+unknown \\
+z
+\end{pmatrix}
+$$
+
+我们就可以得到一部分的 $M_{persp\to ortho}$：
+$$
+M_{persp\to ortho}=\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+? & ? & ? & ? \\
+0 & 0 & 1 & 0
+\end{pmatrix}
+$$
+我们再利用下面两条性质就可以得到未知的部分：
+- 近平面上的点不变。
+- 远平面中心点不变。
+
+用数学语言描述就是，
+- 当 $z=n$ ，即 $(x,y,n,1)^{T}$ 时经过 $M_{persp\to ortho}$ 变换不变。
+- 当 $(0,0,f,1)^{T}$ 经过变换不变。
+
+我们不难写出：
+
+$$
+\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+? & ? & ? & ? \\
+0 & 0 & 1 & 0
+\end{pmatrix}\begin{pmatrix}
+x \\
+y \\
+n \\
+1
+\end{pmatrix}=
+\begin{pmatrix}
+nx + 0 + 0 + 0 \\
+0 + ny + 0 + 0 \\
+x? + y? + n? + 1? \\
+0 + 0 + n + 0
+\end{pmatrix}
+=
+\begin{pmatrix}
+nx \\
+ny \\
+n^{2} \\
+n
+\end{pmatrix}
+$$
+
+单独拿出第三行来看（记最后两个问号为 $A$ 和 $B$）：
+$$
+\begin{pmatrix}
+? & ? & A & B
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+n \\
+1
+\end{pmatrix}
+=n^{2}
+$$
+由于结果中不带有 $x$ 和 $y$ ，前两个 $?$ 就能确定是 $0$。
+
+也就是说：
+$$
+M_{persp\to ortho}=
+\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & A & B \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+$$
+
+我们将最后两位问号分别记为 $A$ 和 $B$。
+根据两条性质分别有：
+
+$$
+\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & A & B \\
+0 & 0 & 1 & 0
+\end{pmatrix}\begin{pmatrix}
+x \\
+y \\
+n \\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+nx \\
+ny \\
+An+B \\
+n
+\end{pmatrix}
+=
+\begin{pmatrix}
+nx \\
+ny \\
+n^{2} \\
+n
+\end{pmatrix}
+$$
+
+$$
+\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & A & B \\
+0 & 0 & 1 & 0
+\end{pmatrix}\begin{pmatrix}
+0 \\
+0 \\
+f \\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 \\
+0 \\
+Af+B \\
+f
+\end{pmatrix}
+=\begin{pmatrix}
+0 \\
+0 \\
+f \\
+1
+\end{pmatrix}
+=\begin{pmatrix}
+0 \\
+0 \\
+f^{2} \\
+f
+\end{pmatrix}
+$$
+所以得到两个关系式：
+
+$$
+\begin{cases}
+An+B=n^{2} \\
+Af+B=f^{2}
+\end{cases}
+$$
+解出：
+
+$$
+\begin{cases}
+A=n+f \\
+B=-nf
+\end{cases}
+$$
+
+### 透视投影数学表示
+
+至此，我们就终于把这个矩阵给填完了：
+
+
+$$
+M_{persp\to ortho}=
+\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & n+f & -nf \\
+0 & 0 & 1 & 0
+\end{pmatrix}
+$$
+当然，别忘记我们的透视投影完整地写出来是这样的：
+
+$$
+M_{persp}=M_{ortho}M_{persp\to ortho}
+$$
+整理一下就是：
+
+$$
+M_{persp}=
+\begin{bmatrix}
+\frac{2}{r-l} & 0 & 0 & 0 \\
+0 & \frac{2}{t-b} & 0 & 0 \\
+0 & 0 & \frac{2}{n-f} & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 & - \frac{r+l}{2} \\
+0 & 1 & 0 & -\frac{t+b}{2} \\
+0 & 0 & 1 & -\frac{n+f}{2} \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & n+f & -nf \\
+0 & 0 & 1 & 0
+\end{bmatrix}
+$$
+
+> 完整地推出这个公式真的很令人激动。
+
+### 最后的问题
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602190002511.png)
+
+对于**中间**($z=\frac{n+f}{2}$)任何一个点，经过挤压的变换后他的 $z$ 会变小还是变大还是不变？（更直观地问这个点是被推向了近平面还是远平面）
+
+我们已经知道了挤压的矩阵，只需要把中间的点代入算一下就好了：
+
+$$
+\begin{pmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & n+f & -nf \\
+0 & 0 & 1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+\frac{n+f}{2} \\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+nx \\
+ny \\
+\frac{(n+f)^{2}}{2}-nf\\
+\frac{n+f}{2}
+\end{pmatrix}=
+\begin{pmatrix}
+nx \\
+ny \\
+\frac{n^{2}+f^{2}+2nf}{2}-\frac{2nf}{2} \\
+\frac{n+f}{2}
+\end{pmatrix}
+=\begin{pmatrix}
+nx \\
+ny \\
+\frac{n^{2}+f^{2}}{2} \\
+\frac{n+f}{2}
+\end{pmatrix}
+$$
+然后规范化我们得到的挤压后的齐次坐标：
+
+$$
+\begin{pmatrix}
+nx \\
+ny \\
+\frac{n^{2}+f^{2}}{2} \\
+\frac{n+f}{2}
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{2nx}{n+f} \\
+\frac{2ny}{n+f} \\
+\frac{n^{2}+f^{2}}{n+f} \\
+1
+\end{pmatrix}
+$$
+我们记新得到的 $z$ 坐标为 $z'$，原来的 $z$ 坐标为 $z$ 。为了比较 $z'$ 和 $z$ 的关系，我们作差：
+
+
+$$
+\begin{aligned}
+z-z'&=\frac{n^{2}+f^{2}}{n+f}-\frac{n+f}{2} \\
+&=\frac{2(n^{2}+f^{2})-(n+f)^{2}}{2(n+f)} \\
+&=\frac{n^{2}+f^{2}-2nf}{2(n+F)} \\
+&=\frac{(n-f)^{2}}{2(n+f)} \leq 0 \\
+\end{aligned}
+$$
+
+由分母决定正负，由于 $(n-f)^{2}$ 永远大于等于零但**分母**在图中的 $-z$ 上是保持小于零的，所以 $z'-z\leq 0$，即 $z' \leq z$。所以变换后的 $z$ 只会变小，又因为 $z$ 越大越近，越小越远，所以被推向了远平面（假设相机在平行线焦点处，Frustum 在 $-z$ 上，也就是 $z$ 的负半轴）。
+
+![image.png](https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202602190002511.png)

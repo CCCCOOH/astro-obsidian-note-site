@@ -1,0 +1,4 @@
+- [暗月笔记（试读版）📒](https://www.yuque.com/yuqueyonghunhc3kb/darkmoon)
+- [月暗笔记（完整版）](https://www.yuque.com/yuqueyonghunhc3kb/gvki77#%20%E3%80%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%80%83%E7%A0%94408%E7%AC%94%E8%AE%B0%E7%9F%A5%E8%AF%86%E5%BA%93%E3%80%8B)
+- [在线算法可视化](https://visualgo.net/en)
+- 《算法导论》

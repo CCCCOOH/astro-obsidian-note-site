@@ -1,26 +1,464 @@
 {
   "nodes": [
     {
-      "id": "notes/hello",
+      "id": "408/408随手记录",
+      "label": "408随手记录",
+      "size": 3,
+      "title": "408随手记录"
+    },
+    {
+      "id": "408/408教材推荐从王道到黑书经验分享",
+      "label": "【408教材推荐】从王道到黑书，经验分享",
+      "size": 3,
+      "title": "【408教材推荐】从王道到黑书，经验分享"
+    },
+    {
+      "id": "hello",
       "label": "Hello Astro",
       "size": 5,
       "title": "Hello Astro"
     },
     {
-      "id": "notes/sub/demo",
+      "id": "index",
+      "label": "首页",
+      "size": 3,
+      "title": "首页"
+    },
+    {
+      "id": "sub/demo",
       "label": "演示笔记",
       "size": 5,
       "title": "演示笔记"
+    },
+    {
+      "id": "其他/astrbot-docker-部署笔记",
+      "label": "AstrBot-Docker-部署笔记",
+      "size": 3,
+      "title": "AstrBot-Docker-部署笔记"
+    },
+    {
+      "id": "其他/bot",
+      "label": "Bot",
+      "size": 3,
+      "title": "Bot"
+    },
+    {
+      "id": "其他/hermes-agent连接本地浏览器-笔记",
+      "label": "Hermes-Agent连接本地浏览器-笔记",
+      "size": 3,
+      "title": "Hermes-Agent连接本地浏览器-笔记"
+    },
+    {
+      "id": "其他/games101/games101-作业踩坑记m1-mac",
+      "label": "Games101 作业踩坑记（M1 Mac）",
+      "size": 3,
+      "title": "Games101 作业踩坑记（M1 Mac）"
+    },
+    {
+      "id": "其他/games101/lecture-04---transformation-cont",
+      "label": "Lecture 04 - Transformation Cont.",
+      "size": 3,
+      "title": "Lecture 04 - Transformation Cont."
+    },
+    {
+      "id": "其他/games101/lecture-05---rasterizationtriangles",
+      "label": "Lecture 05 - Rasterization(Triangles)",
+      "size": 3,
+      "title": "Lecture 05 - Rasterization(Triangles)"
+    },
+    {
+      "id": "其他/ghproxy-link-发布页",
+      "label": "ghproxy-link-发布页",
+      "size": 3,
+      "title": "ghproxy-link-发布页"
+    },
+    {
+      "id": "力扣/1584-连接所有点的最小费用",
+      "label": "1584. 连接所有点的最小费用",
+      "size": 3,
+      "title": "1584. 连接所有点的最小费用"
+    },
+    {
+      "id": "力扣/2236-判断根结点是否等于子结点之和",
+      "label": "2236. 判断根结点是否等于子结点之和",
+      "size": 3,
+      "title": "2236. 判断根结点是否等于子结点之和"
+    },
+    {
+      "id": "力扣/2413-最小偶倍数",
+      "label": "2413. 最小偶倍数",
+      "size": 3,
+      "title": "2413. 最小偶倍数"
+    },
+    {
+      "id": "力扣/2469-温度转换",
+      "label": "2469. 温度转换",
+      "size": 3,
+      "title": "2469. 温度转换"
+    },
+    {
+      "id": "力扣/547-省份数量",
+      "label": "547. 省份数量",
+      "size": 3,
+      "title": "547. 省份数量"
+    },
+    {
+      "id": "力扣/743-网络延迟时间",
+      "label": "743. 网络延迟时间",
+      "size": 3,
+      "title": "743. 网络延迟时间"
+    },
+    {
+      "id": "复试/机试小记面向kr机试的资料整理",
+      "label": "【机试小记】面向kr机试的资料整理",
+      "size": 3,
+      "title": "【机试小记】面向kr机试的资料整理"
+    },
+    {
+      "id": "复试/机试转载如何高效地4个月刷满500题",
+      "label": "【机试｜转载】如何高效地4个月刷满500题",
+      "size": 3,
+      "title": "【机试｜转载】如何高效地4个月刷满500题"
+    },
+    {
+      "id": "复试/退役选手的信竞攻略",
+      "label": "🏅退役选手的信竞攻略",
+      "size": 3,
+      "title": "🏅退役选手的信竞攻略"
+    },
+    {
+      "id": "操作系统/fat文件系统",
+      "label": "FAT文件系统",
+      "size": 3,
+      "title": "FAT文件系统"
+    },
+    {
+      "id": "操作系统/xv6",
+      "label": "xv6",
+      "size": 3,
+      "title": "xv6"
+    },
+    {
+      "id": "操作系统/内存管理小计",
+      "label": "内存管理小计",
+      "size": 3,
+      "title": "内存管理小计"
+    },
+    {
+      "id": "操作系统/操作系统学习资源整理",
+      "label": "操作系统学习资源整理",
+      "size": 3,
+      "title": "操作系统学习资源整理"
+    },
+    {
+      "id": "操作系统/驻留集",
+      "label": "驻留集",
+      "size": 3,
+      "title": "驻留集"
+    },
+    {
+      "id": "数学/latex-suite-snippets-",
+      "label": "【Latex Suite】 Snippets 🧾",
+      "size": 3,
+      "title": "【Latex Suite】 Snippets 🧾"
+    },
+    {
+      "id": "数学/latex-suite常用触发希腊字母",
+      "label": "【Latex Suite】常用触发+希腊字母🧾",
+      "size": 3,
+      "title": "【Latex Suite】常用触发+希腊字母🧾"
+    },
+    {
+      "id": "数学/武忠祥强化课函数性态整理",
+      "label": "【武忠祥强化课】函数性态整理",
+      "size": 3,
+      "title": "【武忠祥强化课】函数性态整理"
+    },
+    {
+      "id": "数学/武忠祥强化课极限整理",
+      "label": "【武忠祥强化课】极限整理",
+      "size": 3,
+      "title": "【武忠祥强化课】极限整理"
+    },
+    {
+      "id": "数学/武忠祥每日一题最新视频",
+      "label": "【武忠祥每日一题】最新视频",
+      "size": 3,
+      "title": "【武忠祥每日一题】最新视频"
+    },
+    {
+      "id": "数学/线代理解特征值与特征向量",
+      "label": "【线代理解】特征值与特征向量",
+      "size": 3,
+      "title": "【线代理解】特征值与特征向量"
+    },
+    {
+      "id": "数学/线代理解线性空间",
+      "label": "【线代理解】线性空间",
+      "size": 3,
+      "title": "【线代理解】线性空间"
+    },
+    {
+      "id": "数学/一点处导数大于零",
+      "label": "一点处导数大于零",
+      "size": 3,
+      "title": "一点处导数大于零"
+    },
+    {
+      "id": "数学/各类做题pdf整理",
+      "label": "各类做题PDF整理",
+      "size": 3,
+      "title": "各类做题PDF整理"
+    },
+    {
+      "id": "数学/各类经验贴整理",
+      "label": "各类经验贴整理",
+      "size": 3,
+      "title": "各类经验贴整理"
+    },
+    {
+      "id": "数学/帕拉迪宇27规划ai省流版",
+      "label": "帕拉迪宇27规划（AI省流版）",
+      "size": 5,
+      "title": "帕拉迪宇27规划（AI省流版）"
+    },
+    {
+      "id": "数学/视频资源整理",
+      "label": "视频资源整理",
+      "size": 3,
+      "title": "视频资源整理"
+    },
+    {
+      "id": "数据结构/王道笔记/第一章绪论",
+      "label": "【第一章】绪论",
+      "size": 3,
+      "title": "【第一章】绪论"
+    },
+    {
+      "id": "数据结构/王道笔记/第七章查找",
+      "label": "【第七章】查找",
+      "size": 3,
+      "title": "【第七章】查找"
+    },
+    {
+      "id": "数据结构/王道笔记/第三章栈队列和数组",
+      "label": "【第三章】栈、队列和数组",
+      "size": 3,
+      "title": "【第三章】栈、队列和数组"
+    },
+    {
+      "id": "数据结构/王道笔记/第二章线性表",
+      "label": "【第二章】线性表",
+      "size": 3,
+      "title": "【第二章】线性表"
+    },
+    {
+      "id": "数据结构/王道笔记/第五章树和二叉树",
+      "label": "【第五章】树和二叉树",
+      "size": 3,
+      "title": "【第五章】树和二叉树"
+    },
+    {
+      "id": "数据结构/王道笔记/第六章图",
+      "label": "【第六章】图",
+      "size": 5,
+      "title": "【第六章】图"
+    },
+    {
+      "id": "数据结构/王道笔记/第四章串",
+      "label": "【第四章】串",
+      "size": 3,
+      "title": "【第四章】串"
+    },
+    {
+      "id": "数据结构/知识切片/c语言复习笔记",
+      "label": "C语言复习笔记📒",
+      "size": 3,
+      "title": "C语言复习笔记📒"
+    },
+    {
+      "id": "数据结构/知识切片/ds资源整理",
+      "label": "【DS】资源整理",
+      "size": 3,
+      "title": "【DS】资源整理"
+    },
+    {
+      "id": "数据结构/知识切片/图/dijkstra的证明理解",
+      "label": "Dijkstra的证明理解",
+      "size": 5,
+      "title": "Dijkstra的证明理解"
+    },
+    {
+      "id": "数据结构/知识切片/图/从算法导论到dijkstra",
+      "label": "从算法导论到Dijkstra",
+      "size": 7,
+      "title": "从算法导论到Dijkstra"
+    },
+    {
+      "id": "数据结构/知识切片/图/图的dfs与bfs遍历",
+      "label": "图的DFS与BFS遍历",
+      "size": 3,
+      "title": "图的DFS与BFS遍历"
+    },
+    {
+      "id": "数据结构/知识切片/图/图的收敛性质",
+      "label": "图的收敛性质",
+      "size": 3,
+      "title": "图的收敛性质"
+    },
+    {
+      "id": "数据结构/知识切片/图/图论算法题整理力扣",
+      "label": "图论算法题整理（力扣）",
+      "size": 5,
+      "title": "图论算法题整理（力扣）"
+    },
+    {
+      "id": "数据结构/知识切片/图/带你发明floyd算法转自灵神",
+      "label": "带你发明Floyd算法（转自灵神）",
+      "size": 3,
+      "title": "带你发明Floyd算法（转自灵神）"
+    },
+    {
+      "id": "数据结构/知识切片/图/最短路径的收敛性质证明理解",
+      "label": "最短路径的收敛性质（证明）理解",
+      "size": 5,
+      "title": "最短路径的收敛性质（证明）理解"
+    },
+    {
+      "id": "数据结构/知识切片/排序/排序代码",
+      "label": "排序代码",
+      "size": 3,
+      "title": "排序代码"
+    },
+    {
+      "id": "数据结构/知识切片/队列拆解",
+      "label": "队列拆解",
+      "size": 3,
+      "title": "队列拆解"
+    },
+    {
+      "id": "数据结构/题单/图论题单",
+      "label": "图论题单",
+      "size": 5,
+      "title": "图论题单"
+    },
+    {
+      "id": "数据结构/题单/常用数据结构算法",
+      "label": "常用数据结构算法",
+      "size": 5,
+      "title": "常用数据结构算法"
+    },
+    {
+      "id": "英语/guardianisrael-strikes-syrias-defence-ministry-in-third-day-of-attacks",
+      "label": "【Guardian】Israel-strikes-Syria’s-defence-ministry-in-third-day-of-attacks",
+      "size": 3,
+      "title": "【Guardian】Israel-strikes-Syria’s-defence-ministry-in-third-day-of-attacks"
+    },
+    {
+      "id": "认知/润色版本学习就是在打游戏",
+      "label": "【润色版本】学习就是在打游戏",
+      "size": 3,
+      "title": "【润色版本】学习就是在打游戏"
+    },
+    {
+      "id": "认知/草稿学习就是在打游戏",
+      "label": "【草稿】学习就是在打游戏",
+      "size": 3,
+      "title": "【草稿】学习就是在打游戏"
+    },
+    {
+      "id": "认知/实用下饭小视频",
+      "label": "实用下饭小视频",
+      "size": 3,
+      "title": "实用下饭小视频"
+    },
+    {
+      "id": "认知/心理学/专注力专注力提升",
+      "label": "【专注力】专注力提升",
+      "size": 3,
+      "title": "【专注力】专注力提升"
+    },
+    {
+      "id": "认知/心理学/刷题考试策略由难入简法",
+      "label": "【刷题｜考试策略】由难入简法",
+      "size": 3,
+      "title": "【刷题｜考试策略】由难入简法"
+    },
+    {
+      "id": "认知/心理学/学习之道20个学习法则",
+      "label": "【学习之道】20个学习法则",
+      "size": 3,
+      "title": "【学习之道】20个学习法则"
+    },
+    {
+      "id": "认知/心理学/组块搭建步骤要当一个耐刷王",
+      "label": "【组块搭建步骤】要当一个耐刷王",
+      "size": 3,
+      "title": "【组块搭建步骤】要当一个耐刷王"
+    },
+    {
+      "id": "认知/心理学/认知心理学考研如何复习谈谈我对间隔式练习的理解",
+      "label": "【认知心理学】考研如何复习？谈谈我对间隔式练习的理解。",
+      "size": 3,
+      "title": "【认知心理学】考研如何复习？谈谈我对间隔式练习的理解。"
+    },
+    {
+      "id": "认知/心理学/认知心理学杂谈为什么有些人学不好xx",
+      "label": "【认知心理学杂谈】为什么有些人学不好xx？",
+      "size": 3,
+      "title": "【认知心理学杂谈】为什么有些人学不好xx？"
+    },
+    {
+      "id": "认知/心理学/记忆原理前摄抑制后摄抑制",
+      "label": "【记忆原理】前摄抑制&后摄抑制",
+      "size": 3,
+      "title": "【记忆原理】前摄抑制&后摄抑制"
     }
   ],
   "edges": [
     {
-      "from": "notes/hello",
-      "to": "notes/sub/demo"
+      "from": "hello",
+      "to": "sub/demo"
     },
     {
-      "from": "notes/sub/demo",
-      "to": "notes/hello"
+      "from": "index",
+      "to": "数学/帕拉迪宇27规划ai省流版"
+    },
+    {
+      "from": "index",
+      "to": "数据结构/知识切片/图/从算法导论到dijkstra"
+    },
+    {
+      "from": "index",
+      "to": "数据结构/题单/图论题单"
+    },
+    {
+      "from": "index",
+      "to": "数据结构/题单/常用数据结构算法"
+    },
+    {
+      "from": "index",
+      "to": "数据结构/知识切片/图/图论算法题整理力扣"
+    },
+    {
+      "from": "sub/demo",
+      "to": "hello"
+    },
+    {
+      "from": "力扣/1584-连接所有点的最小费用",
+      "to": "数据结构/王道笔记/第六章图"
+    },
+    {
+      "from": "数据结构/知识切片/图/dijkstra的证明理解",
+      "to": "数据结构/知识切片/图/从算法导论到dijkstra"
+    },
+    {
+      "from": "数据结构/知识切片/图/从算法导论到dijkstra",
+      "to": "数据结构/知识切片/图/最短路径的收敛性质证明理解"
+    },
+    {
+      "from": "数据结构/知识切片/图/从算法导论到dijkstra",
+      "to": "数据结构/知识切片/图/dijkstra的证明理解"
     }
   ]
 }

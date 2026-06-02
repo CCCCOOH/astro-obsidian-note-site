@@ -14,19 +14,30 @@ export async function getStaticPaths() {
   const notesDir = process.cwd() + '/src/content/notes';
   const entries = [];
 
-  function scan(dir, prefix = '') {
+  function clean(s) {
+    return s
+      .replace(/\.md$/i, '')
+      .replace(/[^\w\s\-\/㐀-䶿一-鿿぀-ゟ゠-ヿ가-힣]/gu, '')
+      .replace(/\s+/g, '-')
+      .replace(/[A-Z]/g, function(c) { return c.toLowerCase(); })
+      .replace(/\.(?=\/|$)/g, '');
+  }
+
+  function scan(dir, prefix) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith('.')) continue;
+      var fp = path.join(dir, entry.name);
       if (entry.isDirectory()) {
-        scan(path.join(dir, entry.name), `${prefix}${entry.name}/`);
+        scan(fp, (prefix || '') + entry.name + '/');
       } else if (entry.name.endsWith('.md')) {
-        entries.push({
-          params: { path: `${prefix}${entry.name.replace(/\.md$/, '')}` },
-          props: { slug: `${prefix}${entry.name.replace(/\.md$/, '')}` },
-        });
+        if (entry.name === 'index.md') continue;
+        var raw = (prefix || '') + entry.name.replace(/\.md$/, '');
+        var slug = clean(raw);
+        entries.push({ params: { path: slug }, props: { slug } });
       }
     }
   }
-  scan(notesDir);
+  scan(notesDir, '');
   return entries;
 }
 
@@ -38,13 +49,13 @@ let backlinks = [];
 let tags = [];
 
 try {
-  const fullSlug = `notes/${slug}`;
   const backlinksData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'backlinks.json'), 'utf-8'));
-  backlinks = backlinksData[fullSlug] || [];
+  backlinks = backlinksData[slug] || [];
 
   const tagsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'tags.json'), 'utf-8'));
+  const notePath = '/notes/' + slug.split('/').map(s => encodeURIComponent(s)).join('/');
   for (const [tag, info] of Object.entries(tagsData)) {
-    if (info.notes.some(n => n.path === `/notes/${encodeURIComponent(slug)}`)) {
+    if (info.notes.some(n => n.path === notePath)) {
       tags.push(tag);
     }
   }
@@ -190,7 +201,8 @@ const title = slug.split('/').pop();
     padding: 20px;
     border-right: 1px solid var(--color-border);
     flex-shrink: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     transition: width 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
   }
   .sidebar-left-collapsed .sidebar-left {

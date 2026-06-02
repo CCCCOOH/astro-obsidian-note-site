@@ -1,0 +1,24 @@
+{
+  "showSidebar": true,
+  "analytics": "G-0KTJS2NN60",
+  "showEditLink": true,
+  "theme": {
+    "theme": "letterpress",
+    "showModeSwitch": true,
+    "defaultMode": "dark"
+  },
+  "nav": {
+    "logo": "https://ccccooh.oss-cn-hangzhou.aliyuncs.com/img/202510240141026.ico",
+    "title": "Sy_Study&Note",
+    "social": [
+      {
+        "label": "github",
+        "name": "CCCCOOH",
+        "href": "https://github.com/CCCCOOH"
+      }
+    ]
+  },
+  "contentExclude": [
+    "/不公开"
+  ]
+}

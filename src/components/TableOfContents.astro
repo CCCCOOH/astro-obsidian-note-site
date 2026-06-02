@@ -1,6 +1,6 @@
 ---
 export interface Props {
-  headings: { id: string; text: string; depth: number }[];
+  headings: { slug: string; text: string; depth: number }[];
 }
 
 const { headings } = Astro.props;
@@ -12,7 +12,7 @@ const { headings } = Astro.props;
     <ul class="toc-list">
       {headings.filter(h => h.depth <= 3).map(h => (
         <li class={`toc-item toc-depth-${h.depth}`}>
-          <a href={`#${h.id}`}>{h.text}</a>
+          <a href={`#${h.slug}`}>{h.text}</a>
         </li>
       ))}
     </ul>

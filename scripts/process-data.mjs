@@ -80,6 +80,22 @@ function encodePath(pathStr) {
   return pathStr.split('/').map(s => encodeURIComponent(s)).join('/');
 }
 
+// 匹配 Astro 内容集合的 ID 清理规则：
+// 移除 emoji、CJK 标点、特殊符号；ASCII 转小写；空格转连字符
+function sanitizeSlug(str) {
+  return str
+    .replace(/\.md$/i, '')
+    .replace(/[^\w\s\-\/㐀-䶿一-鿿぀-ゟ゠-ヿ가-힣]/gu, '')
+    .replace(/\s+/g, '-')
+    .replace(/[A-Z]/g, c => c.toLowerCase())
+    .replace(/\.(?=\/|$)/g, '');
+}
+
+// 从相对路径生成与 Astro 内容集合一致的 entry ID
+function entryId(relativePath) {
+  return sanitizeSlug(relativePath.replace(/\.md$/, ''));
+}
+
 // === 主流程 ===
 const files = scanMarkdownFiles(CONTENT_DIR);
 console.log(`📁 扫描到 ${files.length} 个笔记文件`);
@@ -94,7 +110,7 @@ for (const filePath of files) {
   const content = fs.readFileSync(filePath, 'utf-8');
   const { frontmatter, body } = parseFrontmatter(content);
   const relativePath = path.relative(CONTENT_DIR, filePath).replace(/\.md$/, '');
-  const slug = `notes/${relativePath}`;
+  const slug = entryId(relativePath);
 
   const wikilinks = extractWikilinks(body);
   const inlineTags = extractInlineTags(body);
@@ -105,7 +121,7 @@ for (const filePath of files) {
 
   notesData.push({
     slug,
-    path: `/notes/${encodePath(relativePath)}`,
+    path: `/notes/${encodePath(slug)}`,
     title: frontmatter.title || path.basename(relativePath),
     date: frontmatter.date || null,
     tags,
@@ -113,10 +129,15 @@ for (const filePath of files) {
     filePath,
   });
 
-  const displayName = path.basename(relativePath, '.md');
-  wikilinkMap[displayName] = { path: `/notes/${encodePath(relativePath)}`, slug };
-  wikilinkMap[relativePath] = { path: `/notes/${encodePath(relativePath)}`, slug };
-  wikilinkMap[`${relativePath}.md`] = { path: `/notes/${encodePath(relativePath)}`, slug };
+  const displayName = path.basename(relativePath).replace(/\.md$/, '');
+  const sanitizedName = sanitizeSlug(displayName);
+  wikilinkMap[sanitizedName] = { path: `/notes/${encodePath(slug)}`, slug };
+  wikilinkMap[slug] = { path: `/notes/${encodePath(slug)}`, slug };
+  wikilinkMap[`${slug}.md`] = { path: `/notes/${encodePath(slug)}`, slug };
+  // Also add the original unsanitized name for backward compat
+  if (sanitizedName !== displayName) {
+    wikilinkMap[displayName] = { path: `/notes/${encodePath(slug)}`, slug };
+  }
 
   for (const tag of tags) {
     if (!allTags[tag]) allTags[tag] = new Set();
