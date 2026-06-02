@@ -51,4 +51,4 @@ const icons: Record<string, string> = {
 const icon = icons[name] || icons.info;
 ---
 
-{icon}
+<Fragment set:html={icon} />
