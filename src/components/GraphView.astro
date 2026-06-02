@@ -43,10 +43,11 @@ const jsonStr = JSON.stringify(data);
       const nodes = new vis.DataSet(graphData.nodes.map(n => ({
         id: n.id,
         label: n.label,
-        size: Math.max(15, Math.min(50, n.size * 4)),
+        shape: 'dot',
+        size: Math.max(18, Math.min(50, n.size * 3)),
         title: n.title,
-        font: { size: 12, color: fontColor },
-        borderWidth: 1,
+        font: { size: 14, color: fontColor, face: 'Segoe UI, sans-serif' },
+        borderWidth: 2,
         color: {
           background: nodeColor,
           border: nodeBorder,
