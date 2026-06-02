@@ -1,0 +1,37 @@
+---
+export interface Props {
+  backlinks: { source: string; sourceTitle: string; displayText: string }[];
+}
+
+const { backlinks } = Astro.props;
+---
+
+{backlinks.length > 0 && (
+  <section class="backlinks-section">
+    <h3 class="backlinks-title">被引用 ({backlinks.length})</h3>
+    <ul class="backlinks-list">
+      {backlinks.map(bl => (
+        <li class="backlink-item">
+          <a href={bl.source} class="backlink-source">{bl.sourceTitle}</a>
+          <span class="backlink-text">引用于 "{bl.displayText}"</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .backlinks-section {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+  .backlinks-title { font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-2); color: var(--color-text-secondary); }
+  .backlinks-list { list-style: none; padding: 0; }
+  .backlink-item { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+  .backlink-item:last-child { border-bottom: none; }
+  .backlink-source { color: var(--color-link); font-size: 0.875rem; font-weight: 500; }
+  .backlink-text { display: block; font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2px; }
+</style>

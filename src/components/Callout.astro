@@ -1,0 +1,45 @@
+---
+export interface Props {
+  type: string;
+}
+
+const { type } = Astro.props;
+const typeLabels: Record<string, string> = {
+  note: '📝 Note', warning: '⚠️ Warning', tip: '💡 Tip',
+  important: '❗ Important', caution: '🚧 Caution', info: 'ℹ️ Info',
+  abstract: '📋 Abstract', success: '✅ Success', question: '❓ Question',
+  danger: '🔥 Danger',
+};
+const label = typeLabels[type.toLowerCase()] || `📌 ${type}`;
+---
+
+<div class={`callout callout-${type}`}>
+  <div class="callout-title">{label}</div>
+  <div class="callout-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .callout {
+    margin: var(--space-3) 0;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    border-left: 4px solid;
+    background: var(--color-bg-secondary);
+  }
+  .callout-note { border-left-color: #0969da; }
+  .callout-warning { border-left-color: #d29922; }
+  .callout-tip { border-left-color: #2da44e; }
+  .callout-important { border-left-color: #8250df; }
+  .callout-caution { border-left-color: #cf222e; }
+  .callout-title {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .callout-body { padding: 8px 12px; }
+  .callout-body :first-child { margin-top: 0; }
+  .callout-body :last-child { margin-bottom: 0; }
+</style>

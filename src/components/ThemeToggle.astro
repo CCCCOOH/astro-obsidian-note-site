@@ -1,0 +1,36 @@
+---
+---
+
+<button id="theme-toggle-btn" class="theme-toggle" aria-label="切换主题">
+  <svg class="theme-icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+    <path d="M8 1a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 1zm0 10a3 3 0 100-6 3 3 0 000 6zm6.25-2.75a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5h-1.5zM.75 8.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5H.75zm12.19-5.94a.75.75 0 011.06 0l1.06 1.06a.75.75 0 01-1.06 1.06L12.94 3.62a.75.75 0 010-1.06zM2.44 12.94a.75.75 0 01-1.06 0L.32 11.88a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06zm11.32 0a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM2.44 3.06a.75.75 0 010 1.06L1.38 5.18a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0z"/>
+  </svg>
+  <svg class="theme-icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+    <path d="M6.5 1a.75.75 0 010 1.5 5 5 0 006.25 6.25.75.75 0 01.94.94 6.5 6.5 0 11-8.5-8.5A.75.75 0 016.5 1z"/>
+  </svg>
+</button>
+
+<script>
+  (function() {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  })();
+</script>
+
+<style>
+  .theme-toggle {
+    background: none; border: 1px solid var(--color-border); border-radius: 6px;
+    padding: 4px 8px; cursor: pointer; display: flex; align-items: center;
+    color: var(--color-text-secondary); line-height: 1;
+  }
+  .theme-toggle:hover { background: var(--color-bg-secondary); }
+  [data-theme="dark"] .theme-icon-sun { display: none; }
+  [data-theme="light"] .theme-icon-moon { display: none; }
+</style>
