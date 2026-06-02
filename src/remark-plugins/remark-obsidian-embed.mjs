@@ -48,6 +48,9 @@ export default function remarkObsidianEmbed(options = {}) {
             url: imgPath,
             alt: embedTarget,
             title: null,
+            data: {
+              hProperties: { loading: 'lazy', class: 'embedded-image' },
+            },
           });
         } else if (ext === '.md' || !ext) {
           // Markdown 嵌入 → 尝试读取文件内容

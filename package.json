@@ -8,6 +8,8 @@
     "build": "astro build && npx pagefind --source dist",
     "preview": "astro preview",
     "sync": "bash scripts/sync-notes.sh",
+    "sync:link": "bash scripts/sync-notes.sh --link",
+    "sync:copy": "bash scripts/sync-notes.sh --copy",
     "process": "node scripts/process-data.mjs"
   },
   "dependencies": {
