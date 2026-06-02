@@ -1,0 +1,45 @@
+---
+// src/pages/tags/index.astro
+import BaseLayout from '@layouts/BaseLayout.astro';
+import fs from 'fs';
+import path from 'path';
+
+const tagsPath = path.resolve(process.cwd(), 'src/content/.data/tags.json');
+
+let tags = {};
+try {
+  tags = JSON.parse(fs.readFileSync(tagsPath, 'utf-8'));
+} catch (e) {
+  console.warn('⚠️ tags.json 未找到');
+}
+---
+
+<BaseLayout title="标签" description="所有标签">
+  <div class="tags-page">
+    <h1>🏷️ 标签</h1>
+    <div class="tags-cloud">
+      {Object.entries(tags)
+        .sort(([, a], [, b]) => b.count - a.count)
+        .map(([tag, info]) => (
+          <a href={`/tags/${encodeURIComponent(tag)}`} class="tag-cloud-item" style={`font-size: ${Math.min(1.5, 0.8 + info.count * 0.15)}rem;`}>
+            #{tag}
+            <span class="tag-count">{info.count}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tags-page { max-width: 800px; margin: 0 auto; padding: 2rem; }
+  .tags-cloud { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: 2rem; align-items: center; }
+  .tag-cloud-item {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 12px; border-radius: 16px;
+    background: var(--color-bg-secondary); border: 1px solid var(--color-border);
+    color: var(--color-link); text-decoration: none; transition: all 0.2s;
+  }
+  .tag-cloud-item:hover { background: var(--color-bg-tertiary); text-decoration: none; }
+  .tag-count { font-size: 0.75rem; color: var(--color-text-secondary); }
+</style>

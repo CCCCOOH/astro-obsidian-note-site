@@ -1,0 +1,20 @@
+---
+// src/pages/404.astro
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="页面未找到">
+  <div class="not-found">
+    <h1>404</h1>
+    <p>页面不存在</p>
+    <a href="/" class="back-home">返回首页</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found { text-align: center; padding: 6rem 2rem; }
+  .not-found h1 { font-size: 4rem; color: var(--color-text-secondary); margin-bottom: 1rem; }
+  .not-found p { font-size: 1.25rem; color: var(--color-text-secondary); margin-bottom: 2rem; }
+  .back-home { display: inline-block; padding: 0.5rem 1.5rem; background: var(--color-link); color: #fff; border-radius: 6px; }
+  .back-home:hover { text-decoration: none; opacity: 0.9; }
+</style>

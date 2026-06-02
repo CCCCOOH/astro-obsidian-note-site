@@ -1,0 +1,49 @@
+---
+// src/pages/tags/[tag].astro
+import BaseLayout from '@layouts/BaseLayout.astro';
+import fs from 'fs';
+import path from 'path';
+
+export async function getStaticPaths() {
+  const tagsPath = path.resolve(process.cwd(), 'src/content/.data/tags.json');
+  let tags = {};
+  try {
+    tags = JSON.parse(fs.readFileSync(tagsPath, 'utf-8'));
+  } catch (e) {}
+  return Object.keys(tags).map(tag => ({
+    params: { tag: encodeURIComponent(tag) },
+    props: { tag, notes: tags[tag].notes },
+  }));
+}
+
+const { tag, notes } = Astro.props;
+---
+
+<BaseLayout title={`标签: ${tag}`} description={`标签 ${tag} 下的笔记`}>
+  <div class="tag-page">
+    <nav class="breadcrumb">
+      <a href="/tags">标签</a> / <span>#{tag}</span>
+    </nav>
+
+    <h1># {tag}</h1>
+    <p class="note-count">{notes.length} 篇笔记</p>
+
+    <ul class="note-list">
+      {notes.map(note => (
+        <li>
+          <a href={note.path}>{note.title}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-page { max-width: 800px; margin: 0 auto; padding: 2rem; }
+  .breadcrumb { font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: 1rem; }
+  .breadcrumb a { color: var(--color-text-secondary); }
+  .note-count { color: var(--color-text-secondary); margin: 0.5rem 0 1.5rem; }
+  .note-list { list-style: none; padding: 0; }
+  .note-list li { padding: 0.75rem 0; border-bottom: 1px solid var(--color-border); }
+  .note-list a { color: var(--color-link); font-size: 1.05rem; }
+</style>
