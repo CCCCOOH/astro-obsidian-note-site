@@ -1,12 +1,9 @@
 ---
-// src/pages/index.astro
 import BaseLayout from '@layouts/BaseLayout.astro';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.resolve(__dirname, '../content/.data');
+const DATA_DIR = process.cwd() + '/src/content/.data';
 
 const tagsPath = path.join(DATA_DIR, 'tags.json');
 const backlinksPath = path.join(DATA_DIR, 'backlinks.json');
@@ -21,17 +18,20 @@ try {
   tagCount = Object.keys(tags).length;
   noteCount = Object.keys(backlinks).length;
 
-  const notesDir = path.resolve(__dirname, '../content/notes');
+  const notesDir = process.cwd() + '/src/content/notes';
   const noteFiles = fs.readdirSync(notesDir, { recursive: true })
-    .filter(f => f.endsWith('.md'))
+    .filter(f => String(f).endsWith('.md'))
     .slice(0, 10)
-    .map(f => ({
-      title: path.basename(f, '.md'),
-      path: `/notes/${f.replace(/\.md$/, '')}`,
-    }));
+    .map(f => {
+      const name = String(f).replace(/\.md$/, '');
+      return {
+        title: path.basename(name),
+        path: '/notes/' + name,
+      };
+    });
   latestNotes = noteFiles;
 } catch (e) {
-  console.warn('⚠️ 数据文件未找到，请先运行 npm run process');
+  console.warn('??? 数据文件未找到，请先运行 npm run process');
 }
 ---
 
@@ -63,24 +63,3 @@ try {
     </section>
   </div>
 </BaseLayout>
-
-<style>
-  .home-page { max-width: 800px; margin: 0 auto; padding: 2rem; }
-  .home-header { text-align: center; margin-bottom: 3rem; }
-  .home-subtitle { color: var(--color-text-secondary); }
-  .stats-grid { display: flex; gap: 1rem; justify-content: center; margin-bottom: 3rem; }
-  .stat-card {
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    padding: 1.5rem 2rem;
-    text-align: center;
-    min-width: 120px;
-  }
-  .stat-number { font-size: 2rem; font-weight: 600; color: var(--color-link); }
-  .stat-label { font-size: 0.875rem; color: var(--color-text-secondary); }
-  .latest-notes ul { list-style: none; padding: 0; }
-  .latest-notes li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border); }
-  .latest-notes a { color: var(--color-link); text-decoration: none; }
-  .latest-notes a:hover { text-decoration: underline; }
-</style>
