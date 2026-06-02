@@ -1,0 +1,155 @@
+---
+// src/components/Sidebar.astro — 目录树侧栏
+import Icons from '@components/Icons.astro';
+
+export interface TreeNode {
+  name: string;
+  path?: string;
+  children?: TreeNode[];
+}
+
+export interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+// 从文件系统构建目录树
+import fs from 'fs';
+import path from 'path';
+
+const notesDir = process.cwd() + '/src/content/notes';
+
+function buildTree(dir: string, prefix: string = ''): TreeNode[] {
+  let entries: TreeNode[] = [];
+  try {
+    const items = fs.readdirSync(dir, { withFileTypes: true });
+    const sorted = items.sort((a, b) => {
+      if (a.isDirectory() && !b.isDirectory()) return -1;
+      if (!a.isDirectory() && b.isDirectory()) return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    for (const entry of sorted) {
+      if (entry.name.startsWith('.')) continue;
+      const fullPath = path.join(dir, entry.name);
+      const relPath = prefix + entry.name;
+
+      if (entry.isDirectory()) {
+        const children = buildTree(fullPath, `${relPath}/`);
+        if (children.length > 0) {
+          entries.push({ name: entry.name, children });
+        }
+      } else if (entry.name.endsWith('.md')) {
+        const name = entry.name.replace(/\.md$/, '');
+        const notePath = '/notes/' + (prefix + name);
+        entries.push({ name, path: notePath });
+      }
+    }
+  } catch (e) {
+    // 目录不存在时静默处理
+  }
+  return entries;
+}
+
+const tree = buildTree(notesDir);
+
+function isChildActive(node: TreeNode, cp: string): boolean {
+  if (node.path === '/notes/' + cp) return true;
+  if (node.children) return node.children.some(c => isChildActive(c, cp));
+  return false;
+}
+---
+
+<nav class="sidebar-tree">
+  <div class="sidebar-header">
+    <Icons name="folder" size={14} />
+    <span>笔记目录</span>
+  </div>
+  <ul class="tree-list">
+    {tree.map(node => (
+      <li class:list={['tree-item', { 'tree-has-active': isChildActive(node, currentPath) }]}>
+        {node.path ? (
+          <a href={node.path} class:list={['tree-link', { 'tree-active': node.path === '/notes/' + currentPath }]}>
+            {node.name}
+          </a>
+        ) : (
+          <span class="tree-folder">{node.name}</span>
+        )}
+        {node.children && node.children.length > 0 && (
+          <ul class="tree-sublist">
+            {node.children.map(child => (
+              <li class="tree-item">
+                {child.path ? (
+                  <a href={child.path} class:list={['tree-link', { 'tree-active': child.path === '/notes/' + currentPath }]}>
+                    {child.name}
+                  </a>
+                ) : (
+                  <span class="tree-folder">{child.name}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .sidebar-tree {
+    font-size: 0.85rem;
+  }
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .tree-list, .tree-sublist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tree-sublist {
+    padding-left: 14px;
+    border-left: 1px solid var(--color-border);
+    margin-left: 0;
+    margin-top: 2px;
+  }
+  .tree-item { margin: 1px 0; }
+  .tree-link, .tree-folder {
+    display: block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
+  }
+  .tree-link:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .tree-active {
+    background: var(--color-bg-tertiary);
+    color: var(--color-link);
+    font-weight: 500;
+  }
+  .tree-folder {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    font-size: 0.78rem;
+  }
+  .tree-has-active > .tree-folder {
+    color: var(--color-link);
+  }
+</style>

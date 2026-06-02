@@ -1,11 +1,11 @@
 ---
-// src/components/Header.astro
+import Icons from '@components/Icons.astro';
 ---
 
 <header class="site-header">
   <div class="header-left">
     <a href="/" class="header-logo">
-      <span class="logo-icon">📝</span>
+      <Icons name="book" size={20} />
       <span class="logo-text">Astro Notes</span>
     </a>
   </div>
@@ -19,8 +19,8 @@
 
   <div class="header-right">
     <button id="theme-toggle" class="theme-btn" aria-label="切换主题">
-      <span class="theme-icon-light">☀️</span>
-      <span class="theme-icon-dark">🌙</span>
+      <span class="theme-icon-light"><Icons name="sun" /></span>
+      <span class="theme-icon-dark"><Icons name="moon" /></span>
     </button>
   </div>
 </header>

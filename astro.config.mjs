@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
 import remarkWikilinks from './src/remark-plugins/remark-wikilinks.mjs';
 import remarkObsidianCallout from './src/remark-plugins/remark-obsidian-callout.mjs';
 import remarkObsidianEmbed from './src/remark-plugins/remark-obsidian-embed.mjs';
@@ -23,6 +24,7 @@ export default defineConfig({
     ],
     rehypePlugins: [
       rehypeKatex,
+      rehypeSlug,
     ],
   },
   integrations: [sitemap()],

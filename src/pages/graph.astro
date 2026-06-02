@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Icons from '@components/Icons.astro';
 import GraphView from '@components/GraphView.astro';
 import fs from 'fs';
 import path from 'path';
@@ -16,7 +17,7 @@ try {
 
 <BaseLayout title="关系图谱" description="笔记关系图谱">
   <div class="graph-page">
-    <h1>🔗 关系图谱</h1>
+    <h1><Icons name="graph" /> 关系图谱</h1>
     <GraphView data={graphData} />
   </div>
 </BaseLayout>

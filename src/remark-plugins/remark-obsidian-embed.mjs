@@ -65,7 +65,7 @@ export default function remarkObsidianEmbed(options = {}) {
           } else {
             parts.push({
               type: 'text',
-              value: '⚠️ 嵌入文件不存在',
+              value: '文件不存在',
               data: { hName: 'span', hProperties: { class: 'embed-broken' } },
             });
           }
@@ -75,7 +75,7 @@ export default function remarkObsidianEmbed(options = {}) {
             type: 'link',
             url: `/notes/${embedTarget}`,
             title: embedTarget,
-            children: [{ type: 'text', value: `📎 ${embedTarget}` }],
+            children: [{ type: 'text', value: `附件: ${embedTarget}` }],
           });
         }
 

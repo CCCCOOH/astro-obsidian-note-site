@@ -1,6 +1,7 @@
 ---
 // src/pages/tags/index.astro
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Icons from '@components/Icons.astro';
 import fs from 'fs';
 import path from 'path';
 
@@ -16,7 +17,7 @@ try {
 
 <BaseLayout title="标签" description="所有标签">
   <div class="tags-page">
-    <h1>🏷️ 标签</h1>
+    <h1><Icons name="tag" /> 标签</h1>
     <div class="tags-cloud">
       {Object.entries(tags)
         .sort(([, a], [, b]) => b.count - a.count)

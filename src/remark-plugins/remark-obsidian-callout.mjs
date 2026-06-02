@@ -54,11 +54,7 @@ export default function remarkObsidianCallout() {
               {
                 type: 'text',
                 data: { hName: 'span', hProperties: { class: 'callout-icon' } },
-                value: calloutType === 'note' ? '📝' :
-                       calloutType === 'warning' ? '⚠️' :
-                       calloutType === 'tip' ? '💡' :
-                       calloutType === 'important' ? '❗' :
-                       calloutType === 'caution' ? '🚧' : '📌',
+                value: '',
               },
               { type: 'text', value: calloutType.charAt(0).toUpperCase() + calloutType.slice(1) },
             ],

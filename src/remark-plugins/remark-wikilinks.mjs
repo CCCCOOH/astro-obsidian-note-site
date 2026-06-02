@@ -44,7 +44,7 @@ export default function remarkWikilinks(options = {}) {
 
         // 查找 URL 映射
         const resolved = wikilinkMap[linkTarget] || wikilinkMap[`${linkTarget}|${displayText}`];
-        const url = resolved ? resolved.path : `/notes/${encodeURIComponent(linkTarget)}`;
+        const url = resolved ? resolved.path : `/notes/${linkTarget.split('/').map(s => encodeURIComponent(s)).join('/')}`;
         const isBroken = !resolved;
 
         parts.push({

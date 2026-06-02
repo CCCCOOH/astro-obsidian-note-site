@@ -75,6 +75,11 @@ function extractInlineTags(body) {
   return tags;
 }
 
+// 对路径的每段分别编码（保留 / 分隔符）
+function encodePath(pathStr) {
+  return pathStr.split('/').map(s => encodeURIComponent(s)).join('/');
+}
+
 // === 主流程 ===
 const files = scanMarkdownFiles(CONTENT_DIR);
 console.log(`📁 扫描到 ${files.length} 个笔记文件`);
@@ -100,7 +105,7 @@ for (const filePath of files) {
 
   notesData.push({
     slug,
-    path: `/notes/${encodeURIComponent(relativePath)}`,
+    path: `/notes/${encodePath(relativePath)}`,
     title: frontmatter.title || path.basename(relativePath),
     date: frontmatter.date || null,
     tags,
@@ -109,9 +114,9 @@ for (const filePath of files) {
   });
 
   const displayName = path.basename(relativePath, '.md');
-  wikilinkMap[displayName] = { path: `/notes/${encodeURIComponent(relativePath)}`, slug };
-  wikilinkMap[relativePath] = { path: `/notes/${encodeURIComponent(relativePath)}`, slug };
-  wikilinkMap[`${relativePath}.md`] = { path: `/notes/${encodeURIComponent(relativePath)}`, slug };
+  wikilinkMap[displayName] = { path: `/notes/${encodePath(relativePath)}`, slug };
+  wikilinkMap[relativePath] = { path: `/notes/${encodePath(relativePath)}`, slug };
+  wikilinkMap[`${relativePath}.md`] = { path: `/notes/${encodePath(relativePath)}`, slug };
 
   for (const tag of tags) {
     if (!allTags[tag]) allTags[tag] = new Set();

@@ -24,7 +24,7 @@
         "title": "Hello Astro"
       },
       {
-        "path": "/notes/sub%2Fdemo",
+        "path": "/notes/sub/demo",
         "title": "演示笔记"
       }
     ],

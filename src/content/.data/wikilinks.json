@@ -8,15 +8,15 @@
     "slug": "notes/hello"
   },
   "demo": {
-    "path": "/notes/sub%2Fdemo",
+    "path": "/notes/sub/demo",
     "slug": "notes/sub/demo"
   },
   "sub/demo": {
-    "path": "/notes/sub%2Fdemo",
+    "path": "/notes/sub/demo",
     "slug": "notes/sub/demo"
   },
   "sub/demo.md": {
-    "path": "/notes/sub%2Fdemo",
+    "path": "/notes/sub/demo",
     "slug": "notes/sub/demo"
   }
 }

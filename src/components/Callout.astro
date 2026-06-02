@@ -1,20 +1,25 @@
 ---
+import Icons from '@components/Icons.astro';
+
 export interface Props {
   type: string;
 }
 
 const { type } = Astro.props;
 const typeLabels: Record<string, string> = {
-  note: '📝 Note', warning: '⚠️ Warning', tip: '💡 Tip',
-  important: '❗ Important', caution: '🚧 Caution', info: 'ℹ️ Info',
-  abstract: '📋 Abstract', success: '✅ Success', question: '❓ Question',
-  danger: '🔥 Danger',
+  note: 'Note', warning: 'Warning', tip: 'Tip',
+  important: 'Important', caution: 'Caution', info: 'Info',
+  abstract: 'Abstract', success: 'Success', question: 'Question',
+  danger: 'Danger',
 };
-const label = typeLabels[type.toLowerCase()] || `📌 ${type}`;
+const label = typeLabels[type.toLowerCase()] || type;
 ---
 
 <div class={`callout callout-${type}`}>
-  <div class="callout-title">{label}</div>
+  <div class="callout-title">
+    <Icons name={type.toLowerCase() as any} size={14} />
+    <span>{label}</span>
+  </div>
   <div class="callout-body">
     <slot />
   </div>
@@ -38,6 +43,9 @@ const label = typeLabels[type.toLowerCase()] || `📌 ${type}`;
     font-size: 0.8rem;
     font-weight: 600;
     border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .callout-body { padding: 8px 12px; }
   .callout-body :first-child { margin-top: 0; }

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Icons from '@components/Icons.astro';
 import fs from 'fs';
 import path from 'path';
 
@@ -38,7 +39,7 @@ try {
 <BaseLayout title="首页" description="Astro Obsidian 笔记站">
   <div class="home-page">
     <header class="home-header">
-      <h1>📝 Astro Notes</h1>
+      <h1><Icons name="book" size={24} /> Astro Notes</h1>
       <p class="home-subtitle">基于 Obsidian 的静态笔记站点</p>
     </header>
 

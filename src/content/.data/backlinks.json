@@ -1,7 +1,7 @@
 {
   "notes/hello": [
     {
-      "source": "/notes/sub%2Fdemo",
+      "source": "/notes/sub/demo",
       "sourceTitle": "演示笔记",
       "displayText": "hello"
     }

@@ -7,61 +7,84 @@ export interface Props {
 }
 
 const { data } = Astro.props;
+const jsonStr = JSON.stringify(data);
 ---
 
-<div id="graph-container" class="graph-container"></div>
+<div id="graph-container" class="graph-container">
+  <p class="graph-loading">加载图谱中...</p>
+</div>
+
+<script id="graph-data" type="application/json" set:html={jsonStr}></script>
 
 <script>
-  const graphData = JSON.parse(JSON.stringify(Astro.props.data));
-
   async function initGraph() {
+    const container = document.getElementById('graph-container');
+    if (!container) return;
+
     try {
       const vis = await import('vis-network/standalone/esm/vis-network.min.js');
-      const container = document.getElementById('graph-container');
-      if (!container) return;
+
+      // 读取内联 JSON 数据
+      const dataEl = document.getElementById('graph-data');
+      const graphData = JSON.parse(dataEl.textContent || '{"nodes":[],"edges":[]}');
+
+      if (graphData.nodes.length === 0) {
+        container.innerHTML = '<p class="graph-empty">暂无笔记关系数据</p>';
+        return;
+      }
+
+      // 检测主题
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const nodeColor = isDark ? '#58a6ff' : '#0969da';
+      const nodeBorder = isDark ? '#30363d' : '#d0d7de';
+      const fontColor = isDark ? '#e6edf3' : '#1f2328';
+      const edgeColor = isDark ? '#30363d' : '#d0d7de';
 
       const nodes = new vis.DataSet(graphData.nodes.map(n => ({
         id: n.id,
         label: n.label,
-        size: Math.max(10, n.size * 5),
+        size: Math.max(15, Math.min(50, n.size * 4)),
         title: n.title,
-        font: { size: 12 },
+        font: { size: 12, color: fontColor },
+        borderWidth: 1,
+        color: {
+          background: nodeColor,
+          border: nodeBorder,
+          highlight: { background: '#2da44e', border: '#ffffff' },
+        },
       })));
 
       const edges = new vis.DataSet(graphData.edges.map(e => ({
         from: e.from,
         to: e.to,
-        color: { color: '#d0d7de', highlight: '#58a6ff' },
-        width: 1,
+        color: { color: edgeColor, highlight: '#58a6ff' },
+        width: 1.5,
+        smooth: { type: 'continuous' },
       })));
 
       const options = {
         physics: {
           solver: 'forceAtlas2Based',
-          forceAtlas2Based: { gravitationalConstant: -30, centralGravity: 0.005, springLength: 200, springConstant: 0.02 },
-          stabilization: { iterations: 100 },
+          forceAtlas2Based: {
+            gravitationalConstant: -40,
+            centralGravity: 0.01,
+            springLength: 250,
+            springConstant: 0.04,
+            damping: 0.5,
+          },
+          stabilization: { iterations: 150 },
         },
         interaction: {
           hover: true,
+          tooltipDelay: 100,
           zoomView: true,
           dragView: true,
-        },
-        nodes: {
-          color: { background: '#0969da', border: '#d0d7de', highlight: { background: '#2da44e', border: '#fff' } },
-          font: { color: '#1f2328' },
-          borderWidth: 1,
         },
         edges: {
           smooth: { type: 'continuous' },
         },
         height: '100%',
       };
-
-      // Fix for dark mode: update node font color based on theme
-      const html = document.documentElement;
-      if (html.getAttribute('data-theme') === 'dark') {
-        nodes.forEach(n => { n.font = { ...n.font, color: '#e6edf3' }; });
-      }
 
       const network = new vis.Network(container, { nodes, edges }, options);
 
@@ -71,10 +94,18 @@ const { data } = Astro.props;
           window.location.href = `/${nodeId}`;
         }
       });
+
+      // 双击节点聚焦
+      network.on('doubleClick', (params) => {
+        if (params.nodes.length > 0) {
+          network.focus(params.nodes[0], { scale: 1.5, animation: true });
+        }
+      });
+
+      container.querySelector('.graph-loading')?.remove();
     } catch (e) {
       console.error('vis-network 加载失败:', e);
-      const container = document.getElementById('graph-container');
-      if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--color-text-secondary)">图谱加载失败</p>';
+      container.innerHTML = '<p class="graph-error">图谱加载失败，请刷新重试</p>';
     }
   }
 
@@ -84,9 +115,22 @@ const { data } = Astro.props;
 <style>
   .graph-container {
     width: 100%;
-    height: calc(100vh - var(--header-height) - 2rem);
+    height: calc(100vh - var(--header-height) - 6rem);
+    min-height: 400px;
     border: 1px solid var(--color-border);
     border-radius: 6px;
     background: var(--color-bg-primary);
+    position: relative;
+    overflow: hidden;
+  }
+  .graph-loading,
+  .graph-empty,
+  .graph-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
   }
 </style>
