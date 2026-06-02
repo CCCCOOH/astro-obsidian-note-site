@@ -16,18 +16,18 @@ export const site = {
   /** 网站标题 */
   title: "Sync的笔记仓库",
   /** 网站描述 */
-  description: "Astro+Obsidian+Github UI",
+  description: "基于 Astro 的笔记仓库",
   /** 部署后的完整 URL（用于 SEO） */
   url: "https://example.com",
   /** 网站底部的版权信息 */
-  copyright: `Built with Astro + Obsidian`,
+  copyright: `Built with Astro`,
 };
 
 export const author = {
   /** 作者名称 */
-  name: "Author",
+  name: "Sync",
   /** 简短介绍 */
-  bio: "一个笔记爱好者",
+  bio: "",
   /** 头像路径（放在 public/ 下） */
   avatar: "",
   /** 社交链接 */

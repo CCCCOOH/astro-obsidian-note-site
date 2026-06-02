@@ -11,6 +11,7 @@ export interface Props {
 
 const { title, description, image } = Astro.props;
 const siteTitle = `${title} | Astro Notes`;
+const currentPath = Astro.url.pathname;
 ---
 
 <!DOCTYPE html>
@@ -63,7 +64,7 @@ const siteTitle = `${title} | Astro Notes`;
   <link rel="stylesheet" href="/styles/components.css" />
 </head>
 <body>
-  <Header />
+  <Header currentPath={currentPath} />
   <slot />
   <Footer />
 </body>
