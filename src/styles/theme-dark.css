@@ -1,0 +1,12 @@
+/* src/styles/theme-dark.css */
+[data-theme="dark"] {
+  --color-bg-primary: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-bg-tertiary: #21262d;
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-link: #58a6ff;
+  --color-border: #30363d;
+  --color-accent: #3fb950;
+  --color-danger: #f85149;
+}
