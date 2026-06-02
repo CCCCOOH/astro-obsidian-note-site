@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npx pagefind --source dist",
+    "build": "astro build && npx pagefind --site dist",
     "preview": "astro preview",
     "sync": "bash scripts/sync-notes.sh",
     "sync:link": "bash scripts/sync-notes.sh --link",
