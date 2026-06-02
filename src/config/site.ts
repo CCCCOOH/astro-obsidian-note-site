@@ -27,7 +27,7 @@ export const author = {
   /** 作者名称 */
   name: "Sync",
   /** 简短介绍 */
-  bio: "",
+  bio: "谁",
   /** 头像路径（放在 public/ 下） */
   avatar: "",
   /** 社交链接 */
