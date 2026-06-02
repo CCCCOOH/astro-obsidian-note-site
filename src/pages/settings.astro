@@ -25,11 +25,15 @@ import { site, author } from '@config/site';
       <div class="setting-item">
         <label>主题</label>
         <div class="setting-control">
-          <button id="theme-light" class="setting-btn" data-theme="light">
+          <button class="setting-btn" data-theme="light">
             <Icons name="sun" size={14} /> 亮色
           </button>
-          <button id="theme-dark" class="setting-btn" data-theme="dark">
+          <button class="setting-btn" data-theme="dark">
             <Icons name="moon" size={14} /> 暗色
+          </button>
+          <button class="setting-btn" data-theme="system">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M4.75 2a.75.75 0 01.75.75V3h5v-.25a.75.75 0 011.5 0V3h.5A1.75 1.75 0 0114 4.75v6.5A1.75 1.75 0 0112.25 13h-8.5A1.75 1.75 0 012 11.25v-6.5C2 3.784 2.784 3 3.75 3h.5v-.25A.75.75 0 014.75 2zM6 5.5a.75.75 0 000 1.5h4a.75.75 0 000-1.5H6zM3.5 8.75A.75.75 0 014.25 8h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zm0 2a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75z"/></svg>
+            跟随系统
           </button>
         </div>
       </div>
@@ -59,14 +63,29 @@ import { site, author } from '@config/site';
 </BaseLayout>
 
 <script>
-  // === 主题切换 ===
+  // === 主题切换（亮色/暗色/跟随系统）===
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(mode) {
+    if (mode === 'system') {
+      document.documentElement.setAttribute('data-theme', getSystemTheme());
+    } else {
+      document.documentElement.setAttribute('data-theme', mode);
+    }
+  }
+
   function initTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const saved = localStorage.getItem('theme') || 'system';
+    applyTheme(saved);
+
     document.querySelectorAll('[data-theme]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.theme === current);
+      btn.classList.toggle('active', btn.dataset.theme === saved);
       btn.addEventListener('click', () => {
-        document.documentElement.setAttribute('data-theme', btn.dataset.theme);
-        localStorage.setItem('theme', btn.dataset.theme);
+        const mode = btn.dataset.theme;
+        localStorage.setItem('theme', mode);
+        applyTheme(mode);
         document.querySelectorAll('[data-theme]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
       });
