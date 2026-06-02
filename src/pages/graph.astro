@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import GraphView from '@components/GraphView.astro';
+import fs from 'fs';
+import path from 'path';
+
+const graphPath = process.cwd() + '/src/content/.data/graph.json';
+
+let graphData = { nodes: [], edges: [] };
+try {
+  graphData = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
+} catch (e) {
+  console.warn('⚠️ graph.json 未找到');
+}
+---
+
+<BaseLayout title="关系图谱" description="笔记关系图谱">
+  <div class="graph-page">
+    <h1>🔗 关系图谱</h1>
+    <GraphView data={graphData} />
+  </div>
+</BaseLayout>
+
+<style>
+  .graph-page { padding: 1rem 2rem; }
+  .graph-page h1 { margin-bottom: 1rem; }
+</style>

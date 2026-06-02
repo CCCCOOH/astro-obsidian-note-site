@@ -1,0 +1,92 @@
+---
+export interface Props {
+  data: {
+    nodes: { id: string; label: string; size: number; title: string }[];
+    edges: { from: string; to: string }[];
+  };
+}
+
+const { data } = Astro.props;
+---
+
+<div id="graph-container" class="graph-container"></div>
+
+<script>
+  const graphData = JSON.parse(JSON.stringify(Astro.props.data));
+
+  async function initGraph() {
+    try {
+      const vis = await import('vis-network/standalone/esm/vis-network.min.js');
+      const container = document.getElementById('graph-container');
+      if (!container) return;
+
+      const nodes = new vis.DataSet(graphData.nodes.map(n => ({
+        id: n.id,
+        label: n.label,
+        size: Math.max(10, n.size * 5),
+        title: n.title,
+        font: { size: 12 },
+      })));
+
+      const edges = new vis.DataSet(graphData.edges.map(e => ({
+        from: e.from,
+        to: e.to,
+        color: { color: '#d0d7de', highlight: '#58a6ff' },
+        width: 1,
+      })));
+
+      const options = {
+        physics: {
+          solver: 'forceAtlas2Based',
+          forceAtlas2Based: { gravitationalConstant: -30, centralGravity: 0.005, springLength: 200, springConstant: 0.02 },
+          stabilization: { iterations: 100 },
+        },
+        interaction: {
+          hover: true,
+          zoomView: true,
+          dragView: true,
+        },
+        nodes: {
+          color: { background: '#0969da', border: '#d0d7de', highlight: { background: '#2da44e', border: '#fff' } },
+          font: { color: '#1f2328' },
+          borderWidth: 1,
+        },
+        edges: {
+          smooth: { type: 'continuous' },
+        },
+        height: '100%',
+      };
+
+      // Fix for dark mode: update node font color based on theme
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        nodes.forEach(n => { n.font = { ...n.font, color: '#e6edf3' }; });
+      }
+
+      const network = new vis.Network(container, { nodes, edges }, options);
+
+      network.on('click', (params) => {
+        if (params.nodes.length > 0) {
+          const nodeId = params.nodes[0];
+          window.location.href = `/${nodeId}`;
+        }
+      });
+    } catch (e) {
+      console.error('vis-network 加载失败:', e);
+      const container = document.getElementById('graph-container');
+      if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--color-text-secondary)">图谱加载失败</p>';
+    }
+  }
+
+  initGraph();
+</script>
+
+<style>
+  .graph-container {
+    width: 100%;
+    height: calc(100vh - var(--header-height) - 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-primary);
+  }
+</style>
