@@ -38,7 +38,7 @@ const jsonStr = JSON.stringify(data);
       const nodeColor = isDark ? '#58a6ff' : '#0969da';
       const nodeBorder = isDark ? '#30363d' : '#d0d7de';
       const fontColor = isDark ? '#e6edf3' : '#1f2328';
-      const edgeColor = isDark ? '#30363d' : '#d0d7de';
+      const edgeColor = isDark ? '#484f58' : '#8b949e';
 
       const nodes = new vis.DataSet(graphData.nodes.map(n => ({
         id: n.id,
@@ -59,12 +59,13 @@ const jsonStr = JSON.stringify(data);
         from: e.from,
         to: e.to,
         color: { color: edgeColor, highlight: '#58a6ff' },
-        width: 1.5,
+        width: 2.5,
         smooth: { type: 'continuous' },
       })));
 
       const options = {
         physics: {
+          randomSeed: 42,
           solver: 'forceAtlas2Based',
           forceAtlas2Based: {
             gravitationalConstant: -40,
