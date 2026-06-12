@@ -95,12 +95,12 @@ const title = slug.split('/').pop();
         ))}
       </nav>
 
-      <article class="markdown-body">
+      <article class="markdown-body" data-pagefind-body data-pagefind-meta={`title:${title}`}>
         <header class="note-header">
           <h1>{title}</h1>
           {tags.length > 0 && (
             <div class="note-tags">
-              {tags.map(tag => <TagBadge tag={tag} href={`/tags/${encodeURIComponent(tag)}`} />)}
+              {tags.map(tag => <TagBadge tag={tag} href={`/tags/${tag}`} />)}
             </div>
           )}
         </header>

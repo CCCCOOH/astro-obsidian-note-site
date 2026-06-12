@@ -11,7 +11,7 @@ export async function getStaticPaths() {
     tags = JSON.parse(fs.readFileSync(tagsPath, 'utf-8'));
   } catch (e) {}
   return Object.keys(tags).map(tag => ({
-    params: { tag: encodeURIComponent(tag) },
+    params: { tag },
     props: { tag, notes: tags[tag].notes },
   }));
 }

@@ -8,26 +8,42 @@ const DATA_DIR = process.cwd() + '/src/content/.data';
 
 const tagsPath = path.join(DATA_DIR, 'tags.json');
 const backlinksPath = path.join(DATA_DIR, 'backlinks.json');
+const wikilinksPath = path.join(DATA_DIR, 'wikilinks.json');
 
 let tagCount = 0;
 let noteCount = 0;
 let latestNotes = [];
+let slugMap: Record<string, string> = {};
 
 try {
   const tags = JSON.parse(fs.readFileSync(tagsPath, 'utf-8'));
   const backlinks = JSON.parse(fs.readFileSync(backlinksPath, 'utf-8'));
+  const wikilinks = JSON.parse(fs.readFileSync(wikilinksPath, 'utf-8'));
   tagCount = Object.keys(tags).length;
   noteCount = Object.keys(backlinks).length;
+
+  for (const [key, val] of Object.entries(wikilinks)) {
+    if (typeof val === 'object' && val !== null && 'slug' in val) {
+      slugMap[key] = (val as any).slug;
+    }
+  }
 
   const notesDir = process.cwd() + '/src/content/notes';
   const noteFiles = fs.readdirSync(notesDir, { recursive: true })
     .filter(f => String(f).endsWith('.md'))
     .slice(0, 10)
     .map(f => {
-      const name = String(f).replace(/\.md$/, '');
+      const rawPath = String(f).replace(/\.md$/, '');
+      const slug = slugMap[rawPath] || slugMap[rawPath + '.md'] || rawPath
+        .replace(/\.md$/i, '')
+        .replace(/[^\w\s\-\/㐀-䶿一-鿿぀-ゟ゠-ヿ가-힣]/gu, '')
+        .replace(/\s+/g, '-')
+        .replace(/[A-Z]/g, c => c.toLowerCase())
+        .replace(/\.(?=\/|$)/g, '');
+      const encodedPath = '/notes/' + slug.split('/').map(s => encodeURIComponent(s)).join('/');
       return {
-        title: path.basename(name),
-        path: '/notes/' + name,
+        title: path.basename(rawPath),
+        path: encodedPath,
       };
     });
   latestNotes = noteFiles;

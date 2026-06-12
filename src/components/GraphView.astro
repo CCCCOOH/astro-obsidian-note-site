@@ -93,7 +93,7 @@ const jsonStr = JSON.stringify(data);
       network.on('click', (params) => {
         if (params.nodes.length > 0) {
           const nodeId = params.nodes[0];
-          window.location.href = `/${nodeId}`;
+          window.location.href = `/notes/${nodeId}`;
         }
       });
 

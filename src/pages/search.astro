@@ -37,11 +37,18 @@ import Icons from '@components/Icons.astro';
 
         for (const result of results.results.slice(0, 20)) {
           const data = await result.data();
+          // Pagefind extracts title from <title> tag automatically
+          // Fallback: extract title from URL path
+          let displayTitle = data.meta?.title || data.title;
+          if (!displayTitle && data.url) {
+            const parts = data.url.split('/').filter(Boolean);
+            displayTitle = decodeURIComponent(parts[parts.length - 1] || '无标题');
+          }
           const el = document.createElement('div');
           el.className = 'search-result';
           el.innerHTML = `
-            <a href="${data.url}" class="search-result-title">${data.title}</a>
-            <p class="search-result-excerpt">${data.excerpt}</p>
+            <a href="${data.url}" class="search-result-title">${displayTitle}</a>
+            <p class="search-result-excerpt">${data.excerpt || ''}</p>
           `;
           resultsContainer.appendChild(el);
         }

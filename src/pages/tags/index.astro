@@ -22,7 +22,7 @@ try {
       {Object.entries(tags)
         .sort(([, a], [, b]) => b.count - a.count)
         .map(([tag, info]) => (
-          <a href={`/tags/${encodeURIComponent(tag)}`} class="tag-cloud-item" style={`font-size: ${Math.min(1.5, 0.8 + info.count * 0.15)}rem;`}>
+          <a href={`/tags/${tag}`} class="tag-cloud-item" style={`font-size: ${Math.min(1.5, 0.8 + info.count * 0.15)}rem;`}>
             #{tag}
             <span class="tag-count">{info.count}</span>
           </a>

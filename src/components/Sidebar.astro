@@ -6,6 +6,7 @@ import path from 'path';
 export interface TreeNode {
   name: string;
   path?: string;
+  slug?: string;
   children?: TreeNode[];
 }
 
@@ -15,6 +16,17 @@ export interface Props {
 
 const { currentPath } = Astro.props;
 const notesDir = process.cwd() + '/src/content/notes';
+
+const DATA_DIR = process.cwd() + '/src/content/.data';
+let slugMap: Record<string, string> = {};
+try {
+  const wikilinks = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'wikilinks.json'), 'utf-8'));
+  for (const [key, val] of Object.entries(wikilinks)) {
+    if (typeof val === 'object' && val !== null && 'slug' in val) {
+      slugMap[key] = (val as any).slug;
+    }
+  }
+} catch (e) {}
 
 function buildTree(dir: string, prefix: string = ''): TreeNode[] {
   const entries: TreeNode[] = [];
@@ -36,7 +48,10 @@ function buildTree(dir: string, prefix: string = ''): TreeNode[] {
         }
       } else if (entry.name.endsWith('.md')) {
         const name = entry.name.replace(/\.md$/, '');
-        entries.push({ name, path: '/notes/' + (prefix + name) });
+        const rawPath = prefix + name;
+        const slug = slugMap[rawPath] || slugMap[rawPath + '.md'] || sanitizeForMatch(rawPath);
+        const encodedPath = '/notes/' + slug.split('/').map(s => encodeURIComponent(s)).join('/');
+        entries.push({ name, path: encodedPath, slug });
       }
     }
   } catch (e) {}
@@ -44,7 +59,7 @@ function buildTree(dir: string, prefix: string = ''): TreeNode[] {
 }
 
 function isChildActive(node: TreeNode, cp: string): boolean {
-  if (node.path && sanitizeForMatch(node.path) === '/notes/' + cp) return true;
+  if (node.slug && node.slug === cp) return true;
   if (node.children) return node.children.some(c => isChildActive(c, cp));
   return false;
 }
